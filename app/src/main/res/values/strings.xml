@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BattleShip</string>
+    <string name="button_start">Start</string>
+</resources>
