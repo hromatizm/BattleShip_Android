@@ -1,65 +1,89 @@
-package boats
+package com.example.battleship.boats
 
+import android.content.Context
 import android.widget.TextView
+import com.example.battleship.MyApplication
+import com.example.battleship.coordinates.Coordinate
 import com.example.battleship.coordinates.GetCoord
-import com.example.battleship.seabutton.HumanButton
-import coordinates.HumanCoordGetterController
-
-import fields.TechField4Algorithm
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import com.example.battleship.fields.TechField4Algorithm
+import kotlin.properties.Delegates
 
 // Расстановщик кораблей на поле
 class BoatInstaller(
     private val factory: BoatFactory,
-    private val isHuman: Boolean,
-    private val coordGetterController : HumanCoordGetterController?
+    private val welcomeText: TextView?,
+    private val context: Context?
 ) {
-    lateinit var welcomeText: TextView
-    val techField = factory.techField
+    private val techField = factory.techField
+    val app = MyApplication.getAppInstance()
 
-    // Приглашение поставить корабль:
-    fun printWelcome(size: Int, num: Int, view: TextView) {
+    var newCoordForTurn: Coordinate? by Delegates.observable(null) { _, _, new ->
+        if (new?.letter != null) {
 
-        welcomeText = view
+        }
+    }
+
+    fun installHuman(coord: Coordinate) {
+        val boat = factory.makeBoat(app.listOfHumanBoatsId.removeFirst(), coord, app.isVertical)
+        if (app.listOfHumanBoatsId.isEmpty()) {
+            app.isHumanBoatInstalled = true
+            techField.update()
+
+        }
+        with(techField) {  // На ТехПоле
+            boatList[boat.id] = boat // Добавлем в коллекцию кораблей
+            update() // Обновляем ТехПоле
+            aliveBoatCounter++ // Инкремент счетчика кораблей
+            boatsAndFramesCoordsList.addAll(boat.coordinates)
+            boatsAndFramesCoordsList.addAll(boat.frame)
+        }
+
+    }
+
+    fun printWelcome(id: Int) {
+        val size = id / 10 // Размер корабля - первая цифра id
+        val num = id - size * 10 // Номер корабля данного размера - вторая цифра id
         val boatNumber = when {
             size < 4 -> "$num-й "
-            else     -> ""
+            else -> ""
         }
-        welcomeText.text = ("Поставьте $boatNumber $size-палубный...")
+        welcomeText?.text = ("Поставьте $boatNumber $size-палубный...")
     }
+
+    fun printReady() {
+        welcomeText?.text = ("Корабли расставлены")
+    }
+
+//    fun installAllHuman(
+//        welcomeText: TextView
+//    ) {
+//        while (app.listOfHumanBoatsId.isNotEmpty()) {
+//            Log.d("zzz", app.listOfHumanBoatsId.toString())
+////            installHuman(app.listOfHumanBoatsId[0])
+//            app.listOfHumanBoatsId.removeFirst()
+//        }
+//        MainScope().launch {
+//            welcomeText.text = "Готово!"
+//        }
+//        techField.print()
+//    }
 
     fun printError() {
         println("Не корректные координаты")
     }
 
     // Установка одного корабля. Принимает в качесвте параметра только id корабля
-    suspend fun install(id: Int, welcomeText: TextView?): Pair<Boolean, Boat> {
-        val size = id / 10 // Размер корабля - первая цифра id
-        val num = id - size * 10 // Номер корабля данного размера - вторая цифра id
+    fun installRobot(id: Int): Pair<Boolean, Boat> {
         var boat: Boat
         var testCount = 0
         do {
-
             testCount++
-            if (isHuman) {
-                coordGetterController?.startListenButtons()
-                MainScope().launch {
-                    welcomeText?.run {
-                        printWelcome(size, num, welcomeText)
-                    }
-                }
-
-            } // Сообщение с приглашением поставить корабль
-            val readPair =
-                if (isHuman) GetCoord().boatHuman(id) else GetCoord().boatRobot() // Считываем пару
+            val readPair = GetCoord().boatRobot() // Считываем пару
             val coordBegin = readPair.first // Первый элемент пары - начальная координата корабля
             val isVertical = readPair.second // Второй элемент пары - признак вертикальности
             boat = factory.makeBoat(id, coordBegin, isVertical) // Через фабрику делаем корабль
 
-            if (isHuman && !testBoat(boat))
-                printError()
-            if (techField.boatList.size > 0 && testCount > 100) {
+            if (techField.boatList.isNotEmpty() && testCount > 100) {
                 println("Ups!!")
                 return false to boat
             }
@@ -70,77 +94,18 @@ class BoatInstaller(
             update() // Обновляем ТехПоле
             aliveBoatCounter++ // Инкремент счетчика кораблей
         }
-        if (isHuman) {
-            for (boat in techField.boatList) // Перебираем коллекцию кораблей из ТехПоля
-                for (coord in boat.value.coordinates) {
-//                    SeaController.humanButtonMap.getValue(coord.id).style =
-//                        "-fx-padding: 0.0 3.0 0.0 0.0;" +
-//                                "-fx-text-alignment: center;" +
-//                                "-fx-border-color: darkblue;" +
-//                                "-fx-background-color: radial-gradient(focus-distance 0% , center 50% 50% , radius 100% , skyblue, blue);" +
-//                                "-fx-background-radius: 6;" +
-//                                "-fx-border-radius: 6;" +
-//                                "-fx-border-width: 1px;" +
-//                                "-fx-font-size: 1.7em;" +
-//                                "-fx-pref-width: 29px;" +
-//                                "-fx-pref-height: 29px;"
-//
-                }
-        }
+
         techField.boatsAndFramesCoordsList.addAll(boat.coordinates)
         techField.boatsAndFramesCoordsList.addAll(boat.frame)
         return true to boat
     }
 
     // Принимает список id кораблей для установки:
-    suspend fun installAllHuman(
-        boatsIdToInstall: Collection<Int>,
-        welcomeText: TextView
-    ) { // Установка всех нужных кораблей:
-//        for (button in HumanButton.buttonMap.values) {
-//            button.addEventFilter(
-//                MouseEvent.MOUSE_ENTERED_TARGET,
-//                SeaController.humanCoordGetterController!!.handlerMouseEnter4Install
-//            )
-//            button.addEventFilter(
-//                MouseEvent.MOUSE_EXITED_TARGET,
-//                SeaController.humanCoordGetterController!!.handlerMouseExit4Install
-//            )
-//            button.addEventFilter(
-//                MouseEvent.MOUSE_CLICKED,
-//                SeaController.humanCoordGetterController!!.handlerMouseClick4Install
-//            )
-//        }
+
+    fun installAllRobot(boatsIdToInstall: Collection<Int>) { // Установка всех нужных кораблей:
         for (id in boatsIdToInstall) {
-            install(id, welcomeText)
+            installRobot(id)
         }
-//        for (button in HumanButton.buttonMap.values) {
-//            button.removeEventFilter(
-//                MouseEvent.MOUSE_ENTERED_TARGET,
-//                SeaController.humanCoordGetterController!!.handlerMouseEnter4Install
-//            )
-//            button.removeEventFilter(
-//                MouseEvent.MOUSE_EXITED_TARGET,
-//                SeaController.humanCoordGetterController!!.handlerMouseExit4Install
-//            )
-//            button.removeEventFilter(
-//                MouseEvent.MOUSE_CLICKED,
-//                SeaController.humanCoordGetterController!!.handlerMouseClick4Install
-//            )
-//        }
-
-        MainScope().launch {
-            welcomeText.text = "Готово!"
-        }
-        techField.print()
-    }
-
-    suspend fun installAllRobot(boatsIdToInstall: Collection<Int>) { // Установка всех нужных кораблей:
-        for (id in boatsIdToInstall) {
-            install(id, null)
-
-        }
-
     }
 
     // Проверка - может ли корабль с такими координатами корректно стоять на поле:

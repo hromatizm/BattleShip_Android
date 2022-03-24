@@ -10,7 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BattleShip">
-
+        <activity
+            android:name=".TurnsActivity"
+            android:exported="false" />
         <activity
             android:name=".InstallBoatsActivity"
             android:exported="false" />

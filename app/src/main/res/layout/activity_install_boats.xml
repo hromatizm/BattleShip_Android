@@ -4,14 +4,25 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="@color/transparent_sky_blue"
     android:orientation="vertical">
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2" />
+        android:gravity="center_horizontal"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/confirm_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="confirmToggle"
+            android:text="@string/option_no_confirm"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -32,15 +43,15 @@
         android:id="@+id/welcome_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="10dp"
         android:layout_weight="2"
         android:autoSizeMaxTextSize="30sp"
         android:autoSizeMinTextSize="20sp"
-        android:autoSizeStepGranularity="2sp"
+        android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
         android:text="Поставьте 4-х палубный"
-        android:textAlignment="center"
-        />
+        android:textAlignment="center" />
 
     <RadioGroup
         android:layout_width="match_parent"
@@ -66,8 +77,8 @@
     </RadioGroup>
 
     <include
-        android:id="@+id/field"
-        layout="@layout/human_field"
+        android:id="@+id/human_field"
+        layout="@layout/human_field_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -77,22 +88,22 @@
         android:layout_height="0dp"
         android:layout_weight="4"
 
-        app:layout_constraintTop_toBottomOf="@id/field">
+        app:layout_constraintTop_toBottomOf="@id/human_field">
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/confirm"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:text="Подтвердить установку корабля"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="@color/light_sky_blue"-->
-<!--            android:textSize="20sp"-->
-<!--            android:visibility="invisible"-->
-<!--            app:backgroundTint="@color/sky_blue"-->
-<!--            app:cornerRadius="10dp"-->
-<!--            app:strokeColor="#FF0000"-->
-<!--            app:strokeWidth="2dp" />-->
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/confirm"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:text="Подтвердить установку корабля"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:textColor="@color/light_sky_blue"-->
+        <!--            android:textSize="20sp"-->
+        <!--            android:visibility="invisible"-->
+        <!--            app:backgroundTint="@color/sky_blue"-->
+        <!--            app:cornerRadius="10dp"-->
+        <!--            app:strokeColor="#FF0000"-->
+        <!--            app:strokeWidth="2dp" />-->
 
     </FrameLayout>
 

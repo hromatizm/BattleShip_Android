@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BattleShip</string>
     <string name="button_start">Start</string>
+    <string name="option_no_confirm">Confirm</string>
 </resources>

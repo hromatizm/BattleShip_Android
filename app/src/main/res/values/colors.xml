@@ -7,9 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#AA0000</color>
+    <color name="orange">#FF5500</color>
+    <color name="light_orange">#FFC000</color>
 
     <color name="sky_blue">#00CCFF</color>
     <color name="light_sky_blue">#C0FFFF</color>
+    <color name="dark_blue">#0000CC</color>
+    <color name="transparent">#00000000</color>
+    <color name="semi_dark_blue">#0055FF</color>
     <color name="transparent_sky_blue">#2200CCFF</color>
+
     <color name="popupMenu">#BBFFFFFF</color>
 </resources>

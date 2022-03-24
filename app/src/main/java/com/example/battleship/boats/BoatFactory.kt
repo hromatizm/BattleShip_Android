@@ -1,7 +1,7 @@
-package boats
+package com.example.battleship.boats
 
 import com.example.battleship.coordinates.Coordinate
-import fields.TechField
+import com.example.battleship.fields.TechField
 
 // Фабрика создания корабля
 class BoatFactory(val techField: TechField) {

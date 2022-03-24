@@ -1,47 +1,34 @@
 package com.example.battleship.coordinates
 
-import boats.Boat
-import boats.BoatFactory
-import boats.BoatInstaller
-import coordinates.HumanCoordGetterController
-import fields.TechField
-import fields.TechField4Algorithm
-import kotlinx.coroutines.delay
-import kotlin.properties.Delegates
+import com.example.battleship.boats.Boat
+import com.example.battleship.boats.BoatFactory
+import com.example.battleship.boats.BoatInstaller
+import com.example.battleship.fields.TechField
+import com.example.battleship.fields.TechField4Algorithm
 import kotlin.random.Random
 
 // Получение координаты для утановки корабля или хода:
 class GetCoord {
-    companion object {
-        var gotBoatHuman = false
-        var newCoordForInstall: Coordinate? by Delegates.observable(null) { _, _, new ->
-            if (new?.letter != null && new.number != null) {
-                gotBoatHuman = true
-            }
-        }
-        var gotTurnHuman = false
-        var newCoordForTurn: Coordinate? by Delegates.observable(null) { _, _, new ->
-            if (new?.letter != null && new.number != null) {
-                gotTurnHuman = true
-            }
-        }
-    }
 
     // Получение координаты коорабля от человека:
-    suspend fun boatHuman(id: Int): Pair<Coordinate, Boolean> {
-        val coord: Coordinate?
-        HumanCoordGetterController.boatTemp =
-            Boat(id, Coordinate(1, 1), HumanCoordGetterController.isVertical)
-
-        gotBoatHuman = false
-        while (!gotBoatHuman) {
-            delay(10)
-            println("getFlag = $gotBoatHuman")
-        }
-        coord = Coordinate.copy(newCoordForInstall!!)
-        gotBoatHuman = false
-        return coord to HumanCoordGetterController.isVertical
-    }
+//    suspend fun boatHuman(id: Int): Pair<Coordinate, Boolean> {
+//        val coord: Coordinate
+//
+//        HumanCoordGetterController.boatTemp =
+//            Boat(id, Coordinate(1, 1), HumanCoordGetterController.isVertical)
+//
+//        gotBoatHuman = false
+//        val coodrDef = GlobalScope.async {
+//            while (!gotBoatHuman) {
+//                delay(10)
+//                println("getFlag = $gotBoatHuman")
+//            }
+//            Coordinate.copy(newCoordForInstall!!)
+//        }
+//        coord = coodrDef.await()
+//        gotBoatHuman = false
+//        return coord to HumanCoordGetterController.isVertical
+//    }
 
     // Получение координаты хода от человека:
 //    suspend fun turnHuman(): Coordinate {
@@ -81,7 +68,7 @@ class GetCoord {
         return randomBoat()
     }
 
-    suspend fun turnRobot(tF: TechField): Coordinate {
+    fun turnRobot(tF: TechField): Coordinate {
         val techField = TechField4Algorithm( // Создаем копию ТехПоля, чтобы не менять оригинал
             tF.scoredList,
             tF.failList,
@@ -143,11 +130,13 @@ class GetCoord {
             boatSizeList.count { it == longestBoatSize } // Количество таких кораблей
 
         val longestBoatsIdList = mutableListOf<Int>() // Список ID самых длинных кораблей
-        for (i in 1..longestBoatNumber) longestBoatsIdList.add(longestBoatSize!! * 10 + i)
+        for (i in 1..longestBoatNumber) {
+            longestBoatsIdList.add(longestBoatSize!! * 10 + i)
+        }
 //        longestBoatsIdList.run(::println)
         val installedCoordsMap =
             mutableMapOf<Coordinate?, Int>() // Мапа расставленных координат: кордината - количество
-        val installer = BoatInstaller(BoatFactory(techField), false, null)
+        val installer = BoatInstaller(BoatFactory(techField), null, null)
         for (i in 1..5) { // Делается 5 расстановок
 
             // Могут быть случаи ближе к концу игры, когда при расстановке кораблей (самых длинных, найденных выше)
@@ -158,9 +147,8 @@ class GetCoord {
                 techField.boatList.clear()
                 for (id in longestBoatsIdList) {
                     val testBoatPair =
-                        installer.install(
-                            id,
-                            null
+                        installer.installRobot(
+                            id
                         ) // Установщик возвращает пару: корабль и булеан (результат проверки)
                     val isTestBoatOk = testBoatPair.first
                     if (!isTestBoatOk) // Если проверка пройдена не успешно

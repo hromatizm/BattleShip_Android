@@ -9,7 +9,9 @@
         <entry key="app/src/main/res/layout/activity_install_boats.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_main_menu.xml" value="0.20232088799192735" />
-        <entry key="app/src/main/res/layout/human_field.xml" value="0.31085526315789475" />
+        <entry key="app/src/main/res/layout/activity_turns.xml" value="0.20232088799192735" />
+        <entry key="app/src/main/res/layout/human_field.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/robot_field.xml" value="0.25" />
         <entry key="app/src/main/res/menu/confirm_installation.xml" value="0.40960163432073543" />
       </map>
     </option>

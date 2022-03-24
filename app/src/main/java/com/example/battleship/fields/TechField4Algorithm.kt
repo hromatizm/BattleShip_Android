@@ -1,9 +1,9 @@
-package fields
+package com.example.battleship.fields
 
-import boats.Boat
+import com.example.battleship.boats.Boat
 import com.example.battleship.coordinates.Coordinate
 
-class TechField4Algorithm() : TechField() {
+class TechField4Algorithm() : TechField(null) {
     constructor(
         scoredList: ArrayList<Coordinate>,
         failList: ArrayList<Coordinate>,

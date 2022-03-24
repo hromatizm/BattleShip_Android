@@ -32,8 +32,6 @@ class MainMenuActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.activity_main_menu)
 
-        val app = MyApplication.getAppInstance()
-
         // Анимация
         title = findViewById(R.id.title)
         buttonStart = findViewById(R.id.button_start)

@@ -1,4 +1,4 @@
-package boats
+package com.example.battleship.boats
 
 import com.example.battleship.coordinates.Coordinate
 
