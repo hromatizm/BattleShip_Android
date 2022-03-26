@@ -90,7 +90,7 @@ open class TechField(val context: Context?) {
         println()
     }
 
-    fun humanFieldUiUpdate() {
+    fun fieldUiUpdate() {
         for (button in buttonMap.values) {
             when {
                 button.getIsBlank() -> {
@@ -133,6 +133,12 @@ open class TechField(val context: Context?) {
                     }
                 }
             }
+            if (button.coord == lastTurnCoord) {
+                with(button) {
+                    strokeWidth = 8
+                    setStrokeColorResource(R.color.red)
+                }
+            }
         }
     }
 
@@ -153,6 +159,47 @@ open class TechField(val context: Context?) {
         }
         for (coord in failList) { // Клетки, куда стреляли, но "мимо"
             fieldArray[coord.number][coord.letter] = 0
+        }
+    }
+
+    fun makeUiGray() {
+        for (button in buttonMap.values) {
+            when {
+                button.getIsBlank() -> {
+                    button.setBackgroundColor(
+                        ContextCompat.getColor(context!!, R.color.gray)
+                    )
+                }
+
+                button.getIsFail() -> {
+                    with(button) {
+                        setBackgroundColor(
+                            ContextCompat.getColor(context!!, R.color.light_gray)
+                        )
+                        setStrokeColorResource(R.color.gray)
+                        setTextColor(
+                            ContextCompat.getColor(context, R.color.gray)
+                        )
+                    }
+                }
+                button.getIsDead() -> {
+                    with(button) {
+                        setBackgroundColor(
+                            ContextCompat.getColor(context!!, R.color.light_gray)
+                        )
+                        setStrokeColorResource(R.color.gray)
+                        setTextColor(
+                            ContextCompat.getColor(context, R.color.black)
+                        )
+//                        setTypeface(null, Typeface.BOLD)
+                    }
+                }
+            }
+            if (button.coord == lastTurnCoord) {
+                with(button) {
+                    setStrokeColorResource(R.color.dark_gray)
+                }
+            }
         }
     }
 }

@@ -1,5 +1,27 @@
 <resources>
     <string name="app_name">BattleShip</string>
     <string name="button_start">Start</string>
-    <string name="option_no_confirm">Confirm</string>
+    <string name="button_resume">Resume</string>
+    <string name="option_confirm">Confirm</string>
+    <string name="option_use_index">Index</string>
+
+    <string name="a">A</string>
+    <string name="b">B</string>
+    <string name="c">C</string>
+    <string name="d">D</string>
+    <string name="e">E</string>
+    <string name="f">F</string>
+    <string name="j">J</string>
+    <string name="h">H</string>
+    <string name="i">I</string>
+    <string name="g">G</string>
+
+    <string name="turn_number">Turn № %1$d</string>
+    <string name="turn_fail">Turn № %1$d - fail</string>
+    <string name="turn_scored">Turn № %1$d - scored</string>
+    <string name="turn_dead">Turn № %1$d - dead</string>
+
+    <string name="game_over">GAME OVER. Moves made - %1$d</string>
+
+
 </resources>

@@ -9,7 +9,7 @@ import com.example.battleship.fields.TechField4Algorithm
 import kotlin.properties.Delegates
 
 // Расстановщик кораблей на поле
-class BoatInstaller(
+open class BoatInstaller(
     private val factory: BoatFactory,
     private val welcomeText: TextView?,
     private val context: Context?
@@ -17,18 +17,11 @@ class BoatInstaller(
     private val techField = factory.techField
     val app = MyApplication.getAppInstance()
 
-    var newCoordForTurn: Coordinate? by Delegates.observable(null) { _, _, new ->
-        if (new?.letter != null) {
-
-        }
-    }
-
     fun installHuman(coord: Coordinate) {
         val boat = factory.makeBoat(app.listOfHumanBoatsId.removeFirst(), coord, app.isVertical)
         if (app.listOfHumanBoatsId.isEmpty()) {
             app.isHumanBoatInstalled = true
             techField.update()
-
         }
         with(techField) {  // На ТехПоле
             boatList[boat.id] = boat // Добавлем в коллекцию кораблей
@@ -37,7 +30,6 @@ class BoatInstaller(
             boatsAndFramesCoordsList.addAll(boat.coordinates)
             boatsAndFramesCoordsList.addAll(boat.frame)
         }
-
     }
 
     fun printWelcome(id: Int) {
@@ -53,20 +45,6 @@ class BoatInstaller(
     fun printReady() {
         welcomeText?.text = ("Корабли расставлены")
     }
-
-//    fun installAllHuman(
-//        welcomeText: TextView
-//    ) {
-//        while (app.listOfHumanBoatsId.isNotEmpty()) {
-//            Log.d("zzz", app.listOfHumanBoatsId.toString())
-////            installHuman(app.listOfHumanBoatsId[0])
-//            app.listOfHumanBoatsId.removeFirst()
-//        }
-//        MainScope().launch {
-//            welcomeText.text = "Готово!"
-//        }
-//        techField.print()
-//    }
 
     fun printError() {
         println("Не корректные координаты")
@@ -102,9 +80,11 @@ class BoatInstaller(
 
     // Принимает список id кораблей для установки:
 
-    fun installAllRobot(boatsIdToInstall: Collection<Int>) { // Установка всех нужных кораблей:
-        for (id in boatsIdToInstall) {
+    fun installAllRobot() { // Установка всех нужных кораблей:
+        for (id in app.listOfRobotBoatsId) {
             installRobot(id)
+            app.robotTechField.update()
+            app.robotTechField.print()
         }
     }
 

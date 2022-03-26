@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainMenuActivity : AppCompatActivity() {
 
+    private lateinit var app: MyApplication
     private lateinit var title: TextView
     private lateinit var buttonStart: Button
     private lateinit var titleAnimation: ObjectAnimator
@@ -32,9 +33,19 @@ class MainMenuActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.activity_main_menu)
 
+///////////////////////////////////////////////////////////////
+
+        app = MyApplication.getAppInstance()
+
         // Анимация
         title = findViewById(R.id.title)
         buttonStart = findViewById(R.id.button_start)
+
+        if (app.isFirstStartOfMainMenuActivity) {
+            app.isFirstStartOfMainMenuActivity = false
+        } else {
+            buttonStart.text = getString(R.string.button_resume)
+        }
 
         titleAnimation = ObjectAnimator
             .ofFloat(
@@ -50,8 +61,25 @@ class MainMenuActivity : AppCompatActivity() {
 
     }
 
-    fun installBoats(view: View) {
-        val intent = Intent(this, InstallBoatsActivity::class.java)
-        startActivity(intent)
+    fun onMainButtonClick(view: View) {
+        if (app.isHumanBoatInstalled) {
+            startActivity(
+                Intent(this, TurnsActivity::class.java)
+            )
+        } else {
+            startActivity(
+                Intent(this, InstallBoatsActivity::class.java)
+            )
+        }
+    }
+
+    fun returnToTurnsActivity() {
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        app.isFirstStartOfMainMenuActivity = false
+        buttonStart.text = getString(R.string.button_resume)
     }
 }

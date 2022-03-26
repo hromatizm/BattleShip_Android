@@ -1,32 +1,83 @@
 package com.example.battleship.turns
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
-import kotlin.system.exitProcess
+import android.view.View
+import com.example.battleship.MainMenuActivity
+import com.example.battleship.MyApplication
+import com.example.battleship.TurnsActivity
+import com.example.battleship.coordinates.Coordinate
+import com.example.battleship.seabutton.HumanButton
+import com.example.battleship.seabutton.RobotButton
+import com.example.battleship.seabutton.SeaButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 // Поочередные ходы. Получает в качестве параметра коллекцию типа Turn
-class TurnSequence(val players: List<Turn>) {
+class TurnSequence(
+    private val context: Context?,
+    var parent: View.OnClickListener?,
+    val turnRobot: TurnRobot,
+    val turnHuman: TurnHuman,
+) {
+    var isGoingOn = true
+    var result = false to 0 // Если меньше 0, то ход продолжается (паподание в корабль)
+    // Если больше 0, то это кол-во сделанных ходов
 
-    // Ходы делаются по очереди до тех пор, пока не неступит GAME OVER в каком-то из Turn в коллекции.
-    suspend fun start(): Int {
-        Log.d("zzz", "TurnSequence - start")
-        var isGoingOn = true
-        var turnCounter = 0
-        var result = false to 0
-        while (isGoingOn) {
-            Log.d("zzz", "TurnSequence - while")
-            for (player in players) {
-                Log.d("zzz", "TurnSequence - for")
-                    result = player.makeRobotTurn()
-                Log.d("zzz", result.first.toString())
-                isGoingOn = result.first
-                if(!isGoingOn) {
-                    Thread.sleep(2_000)
-                    return turnCounter
-                }
-                turnCounter = result.second
-                Log.d("zzz", result.second.toString())
-            }
+    val app = MyApplication.getAppInstance()
+
+    // Ходы делаются по очереди до тех пор, пока не неступит GAME OVER в каком-то из Turn
+
+    suspend fun robotTurn() {
+        app.robotTechField.makeUiGray()
+        delay(1_000)
+        app.turnsCounter++
+        result = turnRobot.makeTurn(null)
+        isGoingOn = result.first
+        if (isGoingOn) {
+            startListenButtons()
+            app.robotTechField.fieldUiUpdate()
+        } else {
+            delay(10_000)
+            runMainMenuActivity()
         }
-        return turnCounter // Нужно для анализа при массовых случайных расстановках
+    }
+
+    suspend fun humanTurn(view: View?) {
+        val button = view as RobotButton
+        val turnCoord: Coordinate
+        if (button.getIsFail() || button.getIsDead()) {
+            return
+        } else {
+            turnCoord = button.coord
+            result = turnHuman.makeTurn(turnCoord)
+            isGoingOn = result.first
+        }
+        if (!isGoingOn) {
+            delay(5000)
+            runMainMenuActivity()
+        } else if (result.second >= 0) {
+            stopListenButtons()
+            robotTurn()
+        }
+    }
+
+    private fun runMainMenuActivity() {
+        val intent = Intent(context, MainMenuActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context?.startActivity(intent)
+    }
+
+    fun startListenButtons() {
+        for (button in RobotButton.buttonMap.values)
+            button.setOnClickListener(parent)
+    }
+
+    fun stopListenButtons() {
+        for (button in RobotButton.buttonMap.values)
+            button.setOnClickListener(null)
     }
 }

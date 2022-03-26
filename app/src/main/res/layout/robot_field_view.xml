@@ -5,50 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout style="@style/Sea_Line">
-
-        <TextView style="@style/Square_TextView" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="А" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="Б" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="В" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="Г" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="Д" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="Е" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="Ж" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="З" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="И" />
-
-        <TextView
-            style="@style/Square_TextView"
-            android:text="К" />
-    </LinearLayout>
+    <include layout="@layout/letters_line_view" />
 
     <LinearLayout style="@style/Sea_Line">
 

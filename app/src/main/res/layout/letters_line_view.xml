@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Sea_Line">
+
+    <TextView style="@style/Square_TextView" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/a" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/b" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/c" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/d" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/e" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/f" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/g" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/h" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/i" />
+
+    <TextView
+        style="@style/Square_TextView"
+        android:text="@string/g" />
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.example.battleship.coordinates
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.PopupMenu
@@ -27,8 +28,7 @@ class HumanCoordGetter(
             boatTemp = Boat(app.listOfHumanBoatsId[0], Coordinate(1, 1), app.isVertical)
     }
 
-    fun onClickForInstall(view: View?) {
-
+    fun onClickForInstall(view: View) {
         val button = view as HumanButton
         boatTemp.coordBegin = button.coord
         boatTemp.coordinates[0] = boatTemp.coordBegin
@@ -45,7 +45,7 @@ class HumanCoordGetter(
             }
         }
         boatTemp.coordEnd = boatTemp.coordinates[boatTemp.size - 1]
-
+        var isTryToInstall = false
         for (button in HumanButton.buttonMap.values) {
             if (!boatTemp.coordinates.any { it in app.humanTechField.boatsAndFramesCoordsList })
                 for (coord in boatTemp.coordinates)
@@ -55,13 +55,15 @@ class HumanCoordGetter(
                     ) {
                         button.setStrokeColorResource(R.color.dark_blue)
                         button.strokeWidth = 7
-                        tryToInstall(button, boatTemp)
-                        app.isPopupOnScreen = true
+                        isTryToInstall = true
+                        app.isPopupOnScreen = false
                     }
         }
+        Log.d("zzz", isTryToInstall.toString())
+        if (isTryToInstall) tryToInstallBoat(button, boatTemp)
     }
 
-    private fun tryToInstall(button: HumanButton, boat: Boat) {
+    private fun tryToInstallBoat(button: HumanButton, boat: Boat) {
         if (app.isConfirm) {
             showPopupForInstall(button, boat)
         } else {
@@ -77,7 +79,7 @@ class HumanCoordGetter(
                 it.setIsBoat()
                 button.strokeWidth = 0
             }
-        app.humanTechField.humanFieldUiUpdate()
+        app.humanTechField.fieldUiUpdate()
         app.isPopupOnScreen = false
         if (!app.isHumanBoatInstalled) {
             installer.printWelcome(app.listOfHumanBoatsId[0])
@@ -86,23 +88,31 @@ class HumanCoordGetter(
                 Coordinate(1, 1),
                 app.isVertical
             )
-        } else {
+        } else { // Расстановка завершена
             installer.printReady()
             HumanButton.buttonCounter = 0
             app.saveHumanButtonMap()
-            val intent = Intent(context, TurnsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context?.startActivity(intent)
+            BoatInstaller(app.robotBoatFactory, null, null).installAllRobot()
+            runTurnsActivity()
         }
+    }
+
+    private fun runTurnsActivity() {
+        val intent = Intent(context, TurnsActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context?.startActivity(intent)
     }
 
     private fun showPopupForInstall(button: HumanButton, boat: Boat) {
         stopListenButtons()
+        Log.d("zzz", "showPopupForInstall")
+        Log.d("zzz", app.isPopupOnScreen.toString())
         if (!app.isPopupOnScreen) {
+            Log.d("zzz", app.isPopupOnScreen.toString())
             val gravity = when {
-                button.coord.letter > 5 -> Gravity.RIGHT
-                else -> Gravity.LEFT
+                button.coord.letter > 5 -> Gravity.END
+                else -> Gravity.START
             }
             val popupMenu = PopupMenu(context, button, R.style.popupMenu)
             popupMenu.inflate(R.menu.confirm_installation)
@@ -117,7 +127,7 @@ class HumanCoordGetter(
                     R.id.popup_cancel -> {
                         HumanButton.buttonMap.values.filter { it.coord in boatTemp.coordinates }
                             .forEach { it.strokeWidth = 0 }
-                        app.humanTechField.humanFieldUiUpdate()
+                        app.humanTechField.fieldUiUpdate()
                         app.isPopupOnScreen = false
                         startListenButtons()
                         true
@@ -128,7 +138,7 @@ class HumanCoordGetter(
             popupMenu.setOnDismissListener {
                 HumanButton.buttonMap.values.filter { it.coord in boatTemp.coordinates }
                     .forEach { it.strokeWidth = 0 }
-                app.humanTechField.humanFieldUiUpdate()
+                app.humanTechField.fieldUiUpdate()
                 startListenButtons()
                 app.isPopupOnScreen = false
             }
@@ -137,12 +147,12 @@ class HumanCoordGetter(
 
     fun startListenButtons() {
         for (button in humanButtonMap.values)
-            (button as SeaButton).setOnClickListener(parent)
+            button.setOnClickListener(parent)
     }
 
     private fun stopListenButtons() {
         for (button in humanButtonMap.values)
-            (button as SeaButton).setOnClickListener(null)
+            button.setOnClickListener(null)
     }
 }
 

@@ -16,10 +16,20 @@
 
         <Button
             android:id="@+id/confirm_toggle"
+            style="@style/Options_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="confirmToggle"
-            android:text="@string/option_no_confirm"
+            android:text="@string/option_confirm"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/index_toggle"
+            style="@style/Options_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="indexToggle"
+            android:text="@string/option_use_index"
             android:textAllCaps="false" />
 
     </LinearLayout>
@@ -80,7 +90,8 @@
         android:id="@+id/human_field"
         layout="@layout/human_field_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
     <FrameLayout
         android:id="@+id/frame_down"

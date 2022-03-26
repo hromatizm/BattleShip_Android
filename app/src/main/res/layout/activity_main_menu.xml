@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             app:backgroundTint="@color/light_sky_blue"
-            android:onClick="installBoats"
+            android:onClick="onMainButtonClick"
             android:text="@string/button_start"
             android:textAllCaps="false"
             android:textColor="@color/sky_blue"
