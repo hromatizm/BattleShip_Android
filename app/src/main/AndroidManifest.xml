@@ -11,6 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BattleShip">
         <activity
+            android:name=".ConfirmNewGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConfirmExitActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />

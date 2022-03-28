@@ -27,10 +27,6 @@ import kotlin.properties.Delegates
 class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    companion object{
-        const val WELCOME_TEXT = "WELCOME_TEXT"
-    }
-
     private lateinit var app: MyApplication
 
     lateinit var header: TextView
@@ -96,6 +92,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 
 // Подгоняем поле под размер экрана
         humanFieldView = findViewById(R.id.human_field)
+        app.humanFieldView = humanFieldView
 
 // RadioButton - какой корабль будем ставить: вертиальный или горизонтальный
 
@@ -111,11 +108,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
             }
         }
 
-        savedInstanceState?.run{
-            textOfWelcomeText = getString(WELCOME_TEXT).toString()
-        }
-
-        welcomeText.text = textOfWelcomeText
+      //  welcomeText.text = textOfWelcomeText
 
         coordGetterController.parent = this
 
@@ -123,6 +116,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
             .ofFloat(
                 header, "alpha", 0f, 1f
             ).setDuration(1_000)
+
         makeWelcomeTextVisible = ObjectAnimator
             .ofFloat(
                 welcomeText, "alpha", 0f, 1f
@@ -138,9 +132,11 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         } else {
             humanInstaller.printReady()
         }
-        app.restoreHumanButtonMap()
-        app.humanTechField.fieldUiUpdate()
-
+        if(app.isFirstStartOfInstallBoatsActivity) {
+            app.restoreHumanButtonMap()
+            app.humanTechField.fieldUiUpdate()
+        }
+        app.isFirstStartOfInstallBoatsActivity = false
     }
 
     private fun animationInit() {
@@ -289,10 +285,14 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         app.isConfirm = sharedPreferences.getBoolean("confirm_install", true)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        textOfWelcomeText = welcomeText.text.toString()
-        outState.putString(WELCOME_TEXT, textOfWelcomeText)
-        super.onSaveInstanceState(outState)
+    fun goBackFromInstall(view: View) {
+        onBackPressed()
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainMenuActivity::class.java)
+        startActivity(intent)
+        super.onBackPressed()
     }
 }
 

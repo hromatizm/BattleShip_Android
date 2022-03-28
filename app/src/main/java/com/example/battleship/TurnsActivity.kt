@@ -26,16 +26,16 @@ import kotlinx.coroutines.launch
 
 class TurnsActivity : AppCompatActivity(), View.OnClickListener {
 
-    companion object {
-        const val STATUS_TEXT = "STATUS_TEXT"
-    }
-
     private lateinit var app: MyApplication
     lateinit var rootView: View
     private lateinit var humanFieldView: LinearLayout
     private lateinit var robotFieldView: LinearLayout
-    private lateinit var statusText: TextView
-    var textOfStatusText = ""
+    private lateinit var statusTextRobot: TextView
+    private lateinit var statusTextHuman: TextView
+    private lateinit var turnNumber: TextView
+    var textOfStatusTextRobot = ""
+    var textOfStatusTextHuman = ""
+    var textOfTurnNumber = ""
     private lateinit var turnSequence: TurnSequence
     lateinit var animator: ValueAnimator
 
@@ -64,10 +64,15 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
         rootView = findViewById(R.id.root)
         humanFieldView = findViewById(R.id.human_field)
         robotFieldView = findViewById(R.id.robot_field)
-        statusText = findViewById(R.id.status_text)
+        statusTextRobot = findViewById(R.id.status_text_robot)
+        statusTextHuman = findViewById(R.id.status_text_human)
+        turnNumber = findViewById(R.id.turn_number)
 
         app.humanFieldView = humanFieldView
         app.robotFieldView = robotFieldView
+
+        app.statusTextHuman = statusTextHuman
+        app.statusTextRobot = statusTextRobot
 
         app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
         app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
@@ -77,8 +82,8 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
         app.restoreRobotButtonMap()
         app.robotTechField.fieldUiUpdate()
 
-        val robotTurns = TurnRobot(statusText)
-        val humanTurns = TurnHuman(statusText)
+        val robotTurns = TurnRobot(statusTextRobot, turnNumber)
+        val humanTurns = TurnHuman(statusTextHuman, turnNumber)
 
         turnSequence = TurnSequence(this, this, robotTurns, humanTurns)
         turnSequence.startListenButtons()
@@ -90,7 +95,9 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
 //            textOfStatusText = getString(STATUS_TEXT).toString()
 //        }
 
-        statusText.text = textOfStatusText
+        statusTextRobot.text = textOfStatusTextRobot
+        statusTextHuman.text = textOfStatusTextHuman
+        turnNumber.text = textOfTurnNumber
 
         if (app.isFirstStartOfTurnsActivity) {
             MainScope().launch { startOver() }
@@ -138,14 +145,6 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
 //        app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
 //        app.toggleIndex(robotFieldView)
 //        app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
-    }
-
-    fun enlargeHumanField() {
-
-    }
-
-    fun enlargeRobotField() {
-
     }
 
     override fun onClick(view: View?) {
@@ -196,19 +195,24 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
         app.toggleIndex(humanFieldView)
         app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
         app.toggleIndex(robotFieldView)
-        statusText.text = app.textForStatusText
+        statusTextRobot.text = textOfStatusTextRobot
+        statusTextHuman.text = textOfStatusTextHuman
+        turnNumber.text = textOfTurnNumber
+
 //        setOptionsButtonsFont()
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         val intent = Intent(this, MainMenuActivity::class.java)
         startActivity(intent)
+        super.onBackPressed()
     }
 
     override fun onPause() {
         Thread.sleep(1000)
-        app.textForStatusText = statusText.text.toString()
+        app.textForStatusTextHuman = statusTextHuman.text.toString()
+        app.textForStatusTextRobot = statusTextRobot.text.toString()
+        app.textForTurnNumber = turnNumber.text.toString()
         super.onPause()
     }
 
@@ -222,4 +226,7 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
 //        Log.d("zzz", textOfStatusText)
     }
 
+    fun goBackFromTurns(view: View) {
+        onBackPressed()
+    }
 }

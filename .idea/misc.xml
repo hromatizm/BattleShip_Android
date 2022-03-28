@@ -4,12 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../../layout/custom_preview.xml" value="0.20462962962962963" />
+        <entry key="app/src/main/res/drawable/button_with_shadow.xml" value="0.242" />
+        <entry key="app/src/main/res/drawable/ic_baseline_android_24.xml" value="0.242" />
+        <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/rounded_popup.xml" value="0.1245" />
         <entry key="app/src/main/res/layout-v26/activity_install_boats.xml" value="0.24592391304347827" />
+        <entry key="app/src/main/res/layout/activity_confirm_exit.xml" value="0.4026268115942029" />
+        <entry key="app/src/main/res/layout/activity_confirm_new_game.xml" value="0.4026268115942029" />
         <entry key="app/src/main/res/layout/activity_install_boats.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="app/src/main/res/layout/activity_main_menu.xml" value="0.20232088799192735" />
-        <entry key="app/src/main/res/layout/activity_turns.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/activity_main_menu.xml" value="0.536" />
+        <entry key="app/src/main/res/layout/activity_turns.xml" value="0.4" />
         <entry key="app/src/main/res/layout/human_field.xml" value="0.1" />
         <entry key="app/src/main/res/layout/human_field_view.xml" value="0.176" />
         <entry key="app/src/main/res/layout/letters_line.xml" value="0.25" />
@@ -18,7 +23,9 @@
         <entry key="app/src/main/res/layout/robot_field.xml" value="0.25" />
         <entry key="app/src/main/res/layout/robot_field_view.xml" value="0.25" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.20232088799192735" />
+        <entry key="app/src/main/res/menu/confirm_exit.xml" value="0.41770833333333335" />
         <entry key="app/src/main/res/menu/confirm_installation.xml" value="0.40960163432073543" />
+        <entry key="app/src/main/res/xml/border.xml" value="0.4026268115942029" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.20232088799192735" />
       </map>
     </option>

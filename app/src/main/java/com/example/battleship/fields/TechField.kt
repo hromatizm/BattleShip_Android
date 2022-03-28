@@ -202,4 +202,15 @@ open class TechField(val context: Context?) {
             }
         }
     }
+
+    fun resetField(){
+        boatList.clear()
+        boatsAndFramesCoordsList.clear()
+        scoredList.clear()
+        failList.clear()
+        lastTurnCoord = null
+        aliveBoatCounter = 0
+        buttonMap.values.forEach { it.setIsBlank() }
+        clearField()
+    }
 }

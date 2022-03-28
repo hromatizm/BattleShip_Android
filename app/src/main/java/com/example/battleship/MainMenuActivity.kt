@@ -11,14 +11,19 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat.getY
 
 class MainMenuActivity : AppCompatActivity() {
 
     private lateinit var app: MyApplication
     private lateinit var title: TextView
     private lateinit var buttonStart: Button
+    private lateinit var buttonNewGame: Button
+    private lateinit var buttonExit: Button
     private lateinit var titleAnimation: ObjectAnimator
-    private lateinit var buttonAnimation: ObjectAnimator
+    private lateinit var buttonStartAnimation: ObjectAnimator
+    private lateinit var buttonNewGameAnimation: ObjectAnimator
+    private lateinit var buttonExitAnimation: ObjectAnimator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,20 +45,31 @@ class MainMenuActivity : AppCompatActivity() {
         // Анимация
         title = findViewById(R.id.title)
         buttonStart = findViewById(R.id.button_start)
-
-
+        buttonNewGame = findViewById(R.id.button_new_game)
+        buttonExit = findViewById(R.id.button_exit)
+        val buttonStartY = getY(buttonStart)
+        val buttonNewGameY = getY(buttonNewGame)
+        val buttonExitY = getY(buttonExit)
 
         titleAnimation = ObjectAnimator
             .ofFloat(
-                title, "translationY", -100f, 150f
-            ).setDuration(900)
-        titleAnimation.start()
+                title, "translationY",  (-1) * app.displayHeight.toFloat() , 150f
+            ).setDuration(1000)
 
-        buttonAnimation = ObjectAnimator
+        buttonStartAnimation = ObjectAnimator
             .ofFloat(
-                buttonStart, "translationY", 1000f, 50f
+                buttonStart, "translationY", app.displayHeight.toFloat(), buttonStartY
+            ).setDuration(800)
+
+        buttonNewGameAnimation = ObjectAnimator
+            .ofFloat(
+                buttonNewGame, "translationY", app.displayHeight.toFloat(), buttonNewGameY
             ).setDuration(900)
-        buttonAnimation.start()
+
+        buttonExitAnimation = ObjectAnimator
+            .ofFloat(
+                buttonExit, "translationY", app.displayHeight.toFloat(), buttonExitY
+            ).setDuration(1000)
 
     }
 
@@ -72,8 +88,24 @@ class MainMenuActivity : AppCompatActivity() {
     override fun onStart() {
         if (!app.isFirstStartOfMainMenuActivity) {
             buttonStart.text = getString(R.string.button_resume)
+            buttonNewGame.visibility = View.VISIBLE
         }
+        titleAnimation.start()
+        buttonStartAnimation.start()
+        buttonNewGameAnimation.start()
+        buttonExitAnimation.start()
         super.onStart()
+    }
 
+    fun onExitButtonClick(view: View) {
+        startActivity(
+            Intent(this, ConfirmExitActivity::class.java)
+        )
+    }
+
+    fun onNewGameButtonClick(view: View) {
+        startActivity(
+            Intent(this, ConfirmNewGameActivity::class.java)
+        )
     }
 }

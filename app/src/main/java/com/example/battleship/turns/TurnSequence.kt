@@ -32,13 +32,17 @@ class TurnSequence(
 
     suspend fun robotTurn() {
         app.robotTechField.makeUiGray()
-
         app.setHumanFieldActive()
-        withContext(Dispatchers.Main) {
-            app.turnActivityAnimationInit(app.humanFieldView, app.robotFieldView)
-            app.turnsActivityAnimator.start()
-            app.turnsActivityAnimator.doOnEnd { app.robotTechField.makeUiGray() }
-
+        if (app.isFirstTurn) {
+            app.fitScreenSize(app.humanFieldView, app.isHumanFieldActive)
+            app.robotFieldView?.let { app.fitScreenSize(it, app.isRobotFieldActive) }
+            app.isFirstTurn = false
+        } else {
+            withContext(Dispatchers.Main) {
+                app.robotFieldView?.let { app.turnActivityAnimationInit(app.humanFieldView, it) }
+                app.turnsActivityAnimator.start()
+                app.turnsActivityAnimator.doOnEnd { app.robotTechField.makeUiGray() }
+            }
         }
         delay(1_000)
         app.turnsCounter++
@@ -48,14 +52,12 @@ class TurnSequence(
             startListenButtons()
             app.setRobotFieldActive()
             withContext(Dispatchers.Main) {
-                app.turnActivityAnimationInit(app.robotFieldView, app.humanFieldView)
+                app.robotFieldView?.let { app.turnActivityAnimationInit(it, app.humanFieldView) }
                 app.turnsActivityAnimator.start()
                 app.turnsActivityAnimator.doOnEnd {
                     app.robotTechField.fieldUiUpdate()
-
                 }
             }
-
         } else {
             delay(10_000)
             runMainMenuActivity()
@@ -63,7 +65,6 @@ class TurnSequence(
     }
 
     suspend fun humanTurn(view: View?) {
-
         val button = view as RobotButton
         val turnCoord: Coordinate
         if (button.getIsFail() || button.getIsDead()) {

@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Морской Бой</string>
-    <string name="button_start">Старт</string>
-    <string name="button_resume">Продолжить</string>
+    <string name="app_name">BattleShip</string>
+    <string name="button_start">Start</string>
+    <string name="button_resume">Resume</string>
+    <string name="button_new_game">New</string>
+    <string name="button_exit">Exit</string>
     <string name="option_confirm">Confirm</string>
     <string name="option_use_index">Index</string>
 
@@ -16,7 +18,7 @@
     <string name="i">И</string>
     <string name="g">К</string>
 
-    <string name="turn_number">Ход № %1$d</string>
+    <string name="turn_number">Ход %1$d</string>
     <string name="turn_fail">Ход № %1$d - мимо</string>
     <string name="turn_scored">Ход № %1$d - ранен</string>
     <string name="turn_dead">Turn № %1$d - убит</string>

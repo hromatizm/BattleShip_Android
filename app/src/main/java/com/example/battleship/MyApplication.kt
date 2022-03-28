@@ -6,7 +6,9 @@ import android.app.Application
 import android.content.res.Resources
 import android.view.Gravity
 import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.battleship.boats.BoatFactory
 import com.example.battleship.seabutton.HumanButton
 import com.example.battleship.seabutton.SavedButton
@@ -18,9 +20,6 @@ import com.example.battleship.turns.TurnSequence
 class MyApplication : Application() {
 
     companion object {
-
-        const val PREFS_CONFIRM_KEY = "PREFS_CONFIRM_KEY"
-        const val PREFS_INDEX_KEY = "PREFS_INDEX_KEY"
 
         private lateinit var appInstance: MyApplication
         fun getAppInstance(): MyApplication {
@@ -34,13 +33,17 @@ class MyApplication : Application() {
     var isIndex = true // Нужно ли отображать буквы и цифры ввокруг поля
     var isHumanFieldActive = true // Является ли поле активным
     var isRobotFieldActive = false // Является ли поле активным
+    var isFirstTurn = true // Для первого хода другая анимация
 
     var isFirstStartOfMainMenuActivity = true // Первый запуск MainMenuActivity
     var isFirstStartOfTurnsActivity = true // Первый запуск TurnsActivity
+    var isFirstStartOfInstallBoatsActivity = true // Первый запуск TurnsActivity
     var isHumanBoatInstalled = false // Завершена расстановка кораблей игроком
 
     lateinit var humanFieldView: LinearLayout
-    lateinit var robotFieldView: LinearLayout
+    var robotFieldView: LinearLayout? = null
+    lateinit var statusTextHuman: TextView
+    lateinit var statusTextRobot: TextView
 
     private val displayWidth = Resources.getSystem().displayMetrics.widthPixels.toString()
     val displayHeight = Resources.getSystem().displayMetrics.heightPixels.toString()
@@ -68,9 +71,11 @@ class MyApplication : Application() {
 
     lateinit var turnSequence: TurnSequence
 
-    var turnsActivityAnimator = ValueAnimator().setDuration(1_000)
+    var turnsActivityAnimator = ValueAnimator().setDuration(300)
 
-    var textForStatusText = "" // Для сохранения текста из TurnsActivity
+    var textForStatusTextRobot = "" // Для сохранения текста из TurnsActivity
+    var textForStatusTextHuman = ""
+    var textForTurnNumber = ""
 
     init {
         humanTechField.buttonMap = HumanButton.buttonMap
@@ -160,9 +165,9 @@ class MyApplication : Application() {
     // Перерисовка обоих игровых полей - ативное становится большим, неактивное - маленьким
     fun resizeFields() {
         fitScreenSize(humanFieldView, isHumanFieldActive)
-        fitScreenSize(robotFieldView, isRobotFieldActive)
+        robotFieldView?.let { fitScreenSize(it, isRobotFieldActive) }
         getAllChildren(humanFieldView).forEach { it.requestLayout() }
-        getAllChildren(robotFieldView).forEach { it.requestLayout() }
+        robotFieldView?.let { getAllChildren(it).forEach { it.requestLayout() } }
     }
 
     fun animateFieldResize(groupView: LinearLayout, newSize: Int) {
@@ -221,8 +226,8 @@ class MyApplication : Application() {
 
         turnsActivityAnimator.setObjectValues(0, sizeGap)
         turnsActivityAnimator.addUpdateListener { animation ->
-            val seaLines = getAllChildren(fieldToEnlage)
-            for (line in seaLines) {
+            val seaLinesToEnlarge = getAllChildren(fieldToEnlage)
+            for (line in seaLinesToEnlarge) {
                 getAllChildren(line as LinearLayout).forEach {
                     it.layoutParams.height = smallSize + animation.animatedValue as Int
                     it.layoutParams.width = it.layoutParams.height
@@ -234,8 +239,8 @@ class MyApplication : Application() {
                     gravity = Gravity.CENTER_HORIZONTAL
                 }
 
-                val fieldToEnlarge = getAllChildren(fieldToReduce)
-                for (line in seaLines) {
+                val seaLinesToReduce = getAllChildren(fieldToReduce)
+                for (line in seaLinesToReduce) {
                     getAllChildren(line as LinearLayout).forEach {
                         it.layoutParams.height =
                             largeSize - animation.animatedValue as Int
@@ -259,6 +264,29 @@ class MyApplication : Application() {
                 return (fraction * endValue).toInt()
             }
         })
+    }
+
+    fun resetGame() {
+
+        listOfHumanBoatsId.clear()
+        listOfHumanBoatsId.addAll(listOf(41, 31, 32, 21, 22, 23, 11, 12, 13, 14))
+        listOfRobotBoatsId.clear()
+        listOfRobotBoatsId.addAll(listOf(41, 31, 32, 21, 22, 23, 11, 12, 13, 14))
+
+        HumanButton.buttonCounter = 0
+        RobotButton.buttonCounter = 0
+
+        savedHumanButtonMap.clear()
+        savedRobotButtonMap.clear()
+
+        humanTechField.resetField()
+        robotTechField.resetField()
+
+        humanTechField.clearField()
+        robotTechField.clearField()
+
+        isHumanBoatInstalled = false
+        isFirstStartOfTurnsActivity = true
     }
 
     override fun onCreate() {

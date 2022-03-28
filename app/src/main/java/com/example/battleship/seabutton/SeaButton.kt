@@ -41,4 +41,11 @@ open class SeaButton(context: Context, attrs: AttributeSet?) :
         this.isBoat = false
     }
 
+    fun setIsBlank() {
+        this.isBlank = true
+        this.isDead = false
+        this.isBoat = false
+        this.isFail = false
+    }
+
 }

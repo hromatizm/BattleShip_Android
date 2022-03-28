@@ -1,7 +1,9 @@
 package com.example.battleship.turns
 
 import android.util.Log
+import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.battleship.MyApplication
 import com.example.battleship.R
 import com.example.battleship.coordinates.Coordinate
@@ -10,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-class TurnHuman(private val statusText: TextView) : Turn {
+class TurnHuman(private val statusText: TextView, private val turnNumber: TextView) : Turn {
 
     val app = MyApplication.getAppInstance()
     val techField = app.robotTechField
@@ -19,7 +21,7 @@ class TurnHuman(private val statusText: TextView) : Turn {
     override suspend fun makeTurn(turnCoord: Coordinate?): Pair<Boolean, Int> {
         app.turnSequence.stopListenButtons()
         withContext(Dispatchers.Main) {
-            statusText.text = statusText.context.getString(R.string.turn_number, app.turnsCounter)
+            turnNumber.text =  statusText.context.getString(R.string.turn_number, app.turnsCounter)
         }
 //            if (isHuman) View.topLabel.text = "Ваш ход"
         var isScored = false // Признак, что "попал" в корабль
@@ -38,7 +40,7 @@ class TurnHuman(private val statusText: TextView) : Turn {
                 if (boat?.lives!! == 0) { // Если убит
                     withContext(Dispatchers.Main) {
                         statusText.text =
-                            statusText.context.getString(R.string.turn_dead, app.turnsCounter)
+                            "Убил"
                     }
 
                     for (coordF in boat.frame) { // добавляем рамку корабля в коллекцию с полями "мимо"
@@ -57,16 +59,20 @@ class TurnHuman(private val statusText: TextView) : Turn {
                                 fieldUiUpdate()
                             }
                         }
+                        statusText.visibility = View.GONE
+                        app.statusTextRobot.visibility = View.GONE
+                        turnNumber.setTextColor(
+                            ContextCompat.getColor(app.applicationContext, R.color.red)
+                        )
                         withContext(Dispatchers.Main) {
-                            statusText.text =
+                            turnNumber.text =
                                 statusText.context.getString(R.string.game_over, app.turnsCounter)
                         }
                         return false to app.turnsCounter
                     }
                 } else { // Если попал, но остались жизни
                     withContext(Dispatchers.Main) {
-                        statusText.text =
-                            statusText.context.getString(R.string.turn_scored, app.turnsCounter)
+                        statusText.text = "Ранил"
                     }
                 }
             }
@@ -74,7 +80,7 @@ class TurnHuman(private val statusText: TextView) : Turn {
 
                 withContext(Dispatchers.Main) {
                     statusText.text =
-                        statusText.context.getString(R.string.turn_fail, app.turnsCounter)
+                        "Мимо"
                 }
                 targetButton.setIsFail()
                 techField.failList.add(turnCoord)
