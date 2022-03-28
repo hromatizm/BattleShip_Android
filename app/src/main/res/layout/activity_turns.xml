@@ -10,16 +10,22 @@
         android:id="@+id/frame_down"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:gravity="center">
 
-        <Button
-            android:id="@+id/index_toggle"
-            style="@style/Options_Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="indexToggle"
-            android:text="@string/option_use_index"
-            android:textAllCaps="false" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/index_toggle"-->
+<!--            style="@style/Options_Button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="indexToggle"-->
+<!--            android:text="@string/option_use_index"-->
+<!--            android:textAllCaps="false" />-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/settings"
+            style="@style/Settings_Button"
+            android:onClick="showSettings" />
 
     </LinearLayout>
 

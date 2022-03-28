@@ -18,8 +18,8 @@
     <color name="semi_dark_blue">#0055FF</color>
     <color name="transparent_sky_blue">#2200CCFF</color>
 
-    <color name="gray">#888888</color>
-    <color name="dark_gray">#555555</color>
+    <color name="gray">#BBBBBB</color>
+    <color name="dark_gray">#999999</color>
     <color name="light_gray">#DDDDDD</color>
 
     <color name="popupMenu">#BBFFFFFF</color>

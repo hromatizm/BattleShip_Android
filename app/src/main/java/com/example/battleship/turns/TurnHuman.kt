@@ -14,22 +14,21 @@ class TurnHuman(private val statusText: TextView) : Turn {
 
     val app = MyApplication.getAppInstance()
     val techField = app.robotTechField
-    val buttonMap = techField.buttonMap
+    private val buttonMap = techField.buttonMap
 
-    override suspend fun makeTurn(coord: Coordinate?): Pair<Boolean, Int> {
+    override suspend fun makeTurn(turnCoord: Coordinate?): Pair<Boolean, Int> {
         app.turnSequence.stopListenButtons()
         withContext(Dispatchers.Main) {
             statusText.text = statusText.context.getString(R.string.turn_number, app.turnsCounter)
         }
 //            if (isHuman) View.topLabel.text = "Ваш ход"
         var isScored = false // Признак, что "попал" в корабль
-        val turnCoord = coord!!
         val targetOnTechField =
-            techField.fieldArray[turnCoord.number][turnCoord.letter] // Код на ТехПоле с такой координатой
+            techField.fieldArray[turnCoord!!.number][turnCoord.letter] // Код на ТехПоле с такой координатой
         val targetButton = buttonMap[turnCoord.id] as SeaButton
 
-        when {
-            targetOnTechField in 11..49 -> { // Если код на ТехПоле - это id корабля
+        when (targetOnTechField) {
+            in 11..49 -> { // Если код на ТехПоле - это id корабля
                 isScored = true // то "попал"
                 techField.scoredList.add(turnCoord) // Добавлем координату в коллекцию, где клетки, в которые "попал"
                 targetButton.setIsDead()

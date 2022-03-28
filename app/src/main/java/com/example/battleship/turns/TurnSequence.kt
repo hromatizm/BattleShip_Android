@@ -4,13 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import androidx.core.animation.doOnEnd
 import com.example.battleship.MainMenuActivity
 import com.example.battleship.MyApplication
 import com.example.battleship.TurnsActivity
 import com.example.battleship.coordinates.Coordinate
-import com.example.battleship.seabutton.HumanButton
 import com.example.battleship.seabutton.RobotButton
-import com.example.battleship.seabutton.SeaButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -19,6 +18,7 @@ import kotlinx.coroutines.withContext
 class TurnSequence(
     private val context: Context?,
     var parent: View.OnClickListener?,
+//    val turnsActivity: TurnsActivity,
     val turnRobot: TurnRobot,
     val turnHuman: TurnHuman,
 ) {
@@ -32,13 +32,30 @@ class TurnSequence(
 
     suspend fun robotTurn() {
         app.robotTechField.makeUiGray()
+
+        app.setHumanFieldActive()
+        withContext(Dispatchers.Main) {
+            app.turnActivityAnimationInit(app.humanFieldView, app.robotFieldView)
+            app.turnsActivityAnimator.start()
+            app.turnsActivityAnimator.doOnEnd { app.robotTechField.makeUiGray() }
+
+        }
         delay(1_000)
         app.turnsCounter++
         result = turnRobot.makeTurn(null)
         isGoingOn = result.first
         if (isGoingOn) {
             startListenButtons()
-            app.robotTechField.fieldUiUpdate()
+            app.setRobotFieldActive()
+            withContext(Dispatchers.Main) {
+                app.turnActivityAnimationInit(app.robotFieldView, app.humanFieldView)
+                app.turnsActivityAnimator.start()
+                app.turnsActivityAnimator.doOnEnd {
+                    app.robotTechField.fieldUiUpdate()
+
+                }
+            }
+
         } else {
             delay(10_000)
             runMainMenuActivity()
@@ -46,6 +63,7 @@ class TurnSequence(
     }
 
     suspend fun humanTurn(view: View?) {
+
         val button = view as RobotButton
         val turnCoord: Coordinate
         if (button.getIsFail() || button.getIsDead()) {

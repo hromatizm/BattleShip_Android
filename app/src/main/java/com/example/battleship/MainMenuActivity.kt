@@ -23,6 +23,8 @@ class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        app = MyApplication.getAppInstance()
+
         // Делаем фулл-скрин
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
@@ -35,17 +37,11 @@ class MainMenuActivity : AppCompatActivity() {
 
 ///////////////////////////////////////////////////////////////
 
-        app = MyApplication.getAppInstance()
-
         // Анимация
         title = findViewById(R.id.title)
         buttonStart = findViewById(R.id.button_start)
 
-        if (app.isFirstStartOfMainMenuActivity) {
-            app.isFirstStartOfMainMenuActivity = false
-        } else {
-            buttonStart.text = getString(R.string.button_resume)
-        }
+
 
         titleAnimation = ObjectAnimator
             .ofFloat(
@@ -73,13 +69,11 @@ class MainMenuActivity : AppCompatActivity() {
         }
     }
 
-    fun returnToTurnsActivity() {
+    override fun onStart() {
+        if (!app.isFirstStartOfMainMenuActivity) {
+            buttonStart.text = getString(R.string.button_resume)
+        }
+        super.onStart()
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-        app.isFirstStartOfMainMenuActivity = false
-        buttonStart.text = getString(R.string.button_resume)
     }
 }

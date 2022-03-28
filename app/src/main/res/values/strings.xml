@@ -1,27 +1,40 @@
 <resources>
-    <string name="app_name">BattleShip</string>
-    <string name="button_start">Start</string>
-    <string name="button_resume">Resume</string>
+    <string name="app_name">Морской Бой</string>
+    <string name="button_start">Старт</string>
+    <string name="button_resume">Продолжить</string>
     <string name="option_confirm">Confirm</string>
     <string name="option_use_index">Index</string>
 
-    <string name="a">A</string>
-    <string name="b">B</string>
-    <string name="c">C</string>
-    <string name="d">D</string>
-    <string name="e">E</string>
-    <string name="f">F</string>
-    <string name="j">J</string>
-    <string name="h">H</string>
-    <string name="i">I</string>
-    <string name="g">G</string>
+    <string name="a">А</string>
+    <string name="b">Б</string>
+    <string name="c">В</string>
+    <string name="d">Г</string>
+    <string name="e">Д</string>
+    <string name="f">Е</string>
+    <string name="j">Ж</string>
+    <string name="h">З</string>
+    <string name="i">И</string>
+    <string name="g">К</string>
 
-    <string name="turn_number">Turn № %1$d</string>
-    <string name="turn_fail">Turn № %1$d - fail</string>
-    <string name="turn_scored">Turn № %1$d - scored</string>
-    <string name="turn_dead">Turn № %1$d - dead</string>
+    <string name="turn_number">Ход № %1$d</string>
+    <string name="turn_fail">Ход № %1$d - мимо</string>
+    <string name="turn_scored">Ход № %1$d - ранен</string>
+    <string name="turn_dead">Turn № %1$d - убит</string>
 
-    <string name="game_over">GAME OVER. Moves made - %1$d</string>
+    <string name="game_over">GAME OVER. Сделано ходов - %1$d</string>
+
+    <string name="pref_sync">pref_sync</string>
+    <string name="title_activity_settings">Настройки</string>
+
+
+    <!-- Preferences -->
+    <string name="boat_installing">Установка кораблей</string>
+    <string name="confirm_install">Подтверждать установку корабля</string>
+    <string name="field_look">Внешний вид поля</string>
+    <string name="show_index">Пказывать индекс клеток (буквы и цифры)</string>
+    <string name="install_boats">Расставьте корабли</string>
+    <string name="horizontal">Горизонтальный</string>
+    <string name="vertical">Вертикальный</string>
 
 
 </resources>
