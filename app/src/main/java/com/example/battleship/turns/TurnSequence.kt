@@ -59,8 +59,10 @@ class TurnSequence(
                 }
             }
         } else {
-            delay(10_000)
-            runMainMenuActivity()
+            stopListenButtons()
+            return
+//            delay(10_000)
+//            runMainMenuActivity()
         }
     }
 
@@ -75,8 +77,10 @@ class TurnSequence(
             isGoingOn = result.first
         }
         if (!isGoingOn) {
-            delay(5000)
-            runMainMenuActivity()
+            stopListenButtons()
+            return
+//            delay(5000)
+//            runMainMenuActivity()
         } else if (result.second >= 0) {
             stopListenButtons()
             robotTurn()

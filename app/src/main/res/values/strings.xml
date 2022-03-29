@@ -37,6 +37,8 @@
     <string name="install_boats">Расставьте корабли</string>
     <string name="horizontal">Горизонтальный</string>
     <string name="vertical">Вертикальный</string>
+    <string name="sound_settings">Звуки</string>
+    <string name="sound_toggle">Включить звуки</string>
 
 
 </resources>

@@ -13,7 +13,8 @@
             style="@style/Square_TextView"
             android:text="1" />
 
-        <com.example.battleship.seabutton.HumanButton style="@style/Square_Button" />
+        <com.example.battleship.seabutton.HumanButton style="@style/Square_Button"
+            />
 
         <com.example.battleship.seabutton.HumanButton style="@style/Square_Button" />
 

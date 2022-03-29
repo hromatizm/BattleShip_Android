@@ -31,7 +31,6 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 
     lateinit var header: TextView
     lateinit var welcomeText: TextView
-    var textOfWelcomeText = ""
 
     lateinit var makeHeaderVisible: ObjectAnimator
     lateinit var makeWelcomeTextVisible: ObjectAnimator
@@ -41,8 +40,6 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var radioButtonHorizontal: RadioButton
     private lateinit var radioButtonVertical: RadioButton
 
-    //    private lateinit var confirmToggleButton: Button
-//    private lateinit var indexToggleButton: Button
     private lateinit var root: View
 
     private lateinit var coordGetterController: HumanCoordGetter
@@ -82,8 +79,6 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         header = findViewById(R.id.header)
 
         welcomeText = findViewById(R.id.welcome_text)
-//        confirmToggleButton = findViewById(R.id.confirm_toggle)
-//        indexToggleButton = findViewById(R.id.index_toggle)
 
         humanInstaller = BoatInstaller(app.humanBoatFactory, welcomeText, this)
         coordGetterController = HumanCoordGetter(this, this, humanInstaller)
@@ -108,8 +103,6 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
             }
         }
 
-      //  welcomeText.text = textOfWelcomeText
-
         coordGetterController.parent = this
 
         makeHeaderVisible = ObjectAnimator
@@ -132,11 +125,9 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         } else {
             humanInstaller.printReady()
         }
-        if(app.isFirstStartOfInstallBoatsActivity) {
-            app.restoreHumanButtonMap()
-            app.humanTechField.fieldUiUpdate()
-        }
-        app.isFirstStartOfInstallBoatsActivity = false
+
+        app.restoreHumanButtonMap()
+        app.humanTechField.fieldUiUpdate()
     }
 
     private fun animationInit() {
@@ -204,6 +195,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 
         app.isIndex = preferences.getBoolean("show_index", true)
         app.isConfirm = preferences.getBoolean("confirm_install", true)
+        app.isSoundActive = preferences.getBoolean("sound_settings", true)
         preferences.registerOnSharedPreferenceChangeListener(this)
 
         app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
@@ -283,6 +275,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         app.isIndex = sharedPreferences.getBoolean("show_index", true)
         app.isConfirm = sharedPreferences.getBoolean("confirm_install", true)
+        app.isSoundActive = sharedPreferences.getBoolean("sound_settings", true)
     }
 
     fun goBackFromInstall(view: View) {

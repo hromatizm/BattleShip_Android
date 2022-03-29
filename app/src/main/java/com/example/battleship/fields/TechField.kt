@@ -1,7 +1,9 @@
 package com.example.battleship.fields
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import androidx.core.content.ContextCompat
 import com.example.battleship.boats.Boat
 import com.example.battleship.R
@@ -100,9 +102,13 @@ open class TechField(val context: Context?) {
                 }
                 button.getIsBoat() -> {
                     with(button) {
-                        setBackgroundColor(
-                            ContextCompat.getColor(context!!, R.color.dark_blue)
-                        )
+//                        setBackgroundColor(
+//                            ContextCompat.getColor(context!!, R.color.dark_blue)
+//                        )
+//                        backgroundTintList = ContextCompat.getColorStateList(context!!,R.color.dark_blue)
+                        ContextCompat.getDrawable(context!!,R.drawable.gradient_boat)?.let {
+                            background = it
+                        }
                     }
                 }
                 button.getIsFail() -> {
@@ -120,11 +126,15 @@ open class TechField(val context: Context?) {
                 }
                 button.getIsDead() -> {
                     with(button) {
-                        setBackgroundColor(
-                            ContextCompat.getColor(context!!, R.color.light_orange)
-                        )
-                        strokeWidth = 5
-                        setStrokeColorResource(R.color.orange)
+                        ContextCompat.getDrawable(context!!,R.drawable.dead_boat)?.let {
+                            background = it
+                        }
+//                        backgroundTintList = ContextCompat.getColorStateList(context!!,R.color.light_orange)
+//                        setBackgroundColor(
+//                            ContextCompat.getColor(context!!, R.color.light_orange)
+//                        )
+//                        strokeWidth = 5
+//                        setStrokeColorResource(R.color.orange)
                         text = deadChar
                         setTextColor(
                             ContextCompat.getColor(context, R.color.black)

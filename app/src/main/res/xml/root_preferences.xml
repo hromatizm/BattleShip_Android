@@ -15,4 +15,10 @@
             app:singleLineTitle="false"
             app:title="@string/show_index" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/sound_settings">
+        <SwitchPreferenceCompat
+            app:key="sound_settings"
+            app:singleLineTitle="false"
+            app:title="@string/sound_toggle" />
+    </PreferenceCategory>
 </PreferenceScreen>

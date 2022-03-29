@@ -1,5 +1,8 @@
 package com.example.battleship.turns
 
+import android.content.Context
+import android.media.MediaActionSound
+import android.media.MediaPlayer
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -12,16 +15,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-class TurnHuman(private val statusText: TextView, private val turnNumber: TextView) : Turn {
+class TurnHuman(
+    private val statusText: TextView,
+    private val turnNumber: TextView,
+    val context: Context
+) : Turn {
 
     val app = MyApplication.getAppInstance()
     val techField = app.robotTechField
     private val buttonMap = techField.buttonMap
+    var failSound = MediaPlayer.create(context, R.raw.water_bubbling)
+    var explosionShortSound = MediaPlayer.create(context, R.raw.explosion_short)
+    var explosionLongSound = MediaPlayer.create(context, R.raw.explosion_long)
 
     override suspend fun makeTurn(turnCoord: Coordinate?): Pair<Boolean, Int> {
         app.turnSequence.stopListenButtons()
         withContext(Dispatchers.Main) {
-            turnNumber.text =  statusText.context.getString(R.string.turn_number, app.turnsCounter)
+            turnNumber.text = statusText.context.getString(R.string.turn_number, app.turnsCounter)
         }
 //            if (isHuman) View.topLabel.text = "Ваш ход"
         var isScored = false // Признак, что "попал" в корабль
@@ -39,6 +49,15 @@ class TurnHuman(private val statusText: TextView, private val turnNumber: TextVi
                 boat?.liveMinus() // Сокращаем жизнь
                 if (boat?.lives!! == 0) { // Если убит
                     withContext(Dispatchers.Main) {
+                        if(app.isSoundActive) {
+                            if (explosionLongSound.isPlaying) {
+                                explosionLongSound.stop()
+                                explosionLongSound.release()
+                                explosionLongSound =
+                                    MediaPlayer.create(context, R.raw.explosion_long)
+                            }
+                            explosionLongSound.start()
+                        }
                         statusText.text =
                             "Убил"
                     }
@@ -72,6 +91,15 @@ class TurnHuman(private val statusText: TextView, private val turnNumber: TextVi
                     }
                 } else { // Если попал, но остались жизни
                     withContext(Dispatchers.Main) {
+                        if(app.isSoundActive) {
+                            if (explosionShortSound.isPlaying) {
+                                explosionShortSound.stop()
+                                explosionShortSound.release()
+                                explosionShortSound =
+                                    MediaPlayer.create(context, R.raw.explosion_short)
+                            }
+                            explosionShortSound.start()
+                        }
                         statusText.text = "Ранил"
                     }
                 }
@@ -79,6 +107,14 @@ class TurnHuman(private val statusText: TextView, private val turnNumber: TextVi
             else -> {
 
                 withContext(Dispatchers.Main) {
+                    if(app.isSoundActive) {
+                        if (failSound.isPlaying) {
+                            failSound.stop()
+                            failSound.release()
+                            failSound = MediaPlayer.create(context, R.raw.water_bubbling)
+                        }
+                        failSound.start()
+                    }
                     statusText.text =
                         "Мимо"
                 }

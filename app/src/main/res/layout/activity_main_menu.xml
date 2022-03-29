@@ -47,6 +47,7 @@
             android:layout_width="200dp"
             android:layout_height="100dp"
             android:onClick="onMainButtonClick"
+
             android:text="@string/button_start" />
 
         <com.google.android.material.button.MaterialButton

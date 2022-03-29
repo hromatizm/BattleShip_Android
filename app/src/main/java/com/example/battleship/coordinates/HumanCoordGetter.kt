@@ -2,6 +2,7 @@ package com.example.battleship.coordinates
 
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -22,6 +23,9 @@ class HumanCoordGetter(
     private val humanButtonMap = HumanButton.buttonMap
     private val app = MyApplication.getAppInstance()
     private lateinit var boatTemp: Boat
+
+    var installSound = MediaPlayer.create(context, R.raw.water_splash)
+    var bumpSound = MediaPlayer.create(context, R.raw.bump)
 
     init {
         if (!app.isHumanBoatInstalled)
@@ -55,12 +59,33 @@ class HumanCoordGetter(
                     ) {
                         button.setStrokeColorResource(R.color.dark_blue)
                         button.strokeWidth = 7
+
                         isTryToInstall = true
                         app.isPopupOnScreen = false
                     }
+
         }
-        Log.d("zzz", isTryToInstall.toString())
-        if (isTryToInstall) tryToInstallBoat(button, boatTemp)
+        if (isTryToInstall) {
+            tryToInstallBoat(button, boatTemp)
+            if(app.isSoundActive) {
+                if (installSound.isPlaying) {
+                    installSound.stop()
+                    installSound.release()
+                    installSound = MediaPlayer.create(context, R.raw.water_splash)
+                }
+                installSound.start()
+            }
+
+        } else {
+            if(app.isSoundActive) {
+                if (bumpSound.isPlaying) {
+                    bumpSound.stop()
+                    bumpSound.release()
+                    bumpSound = MediaPlayer.create(context, R.raw.bump)
+                }
+                bumpSound.start()
+            }
+        }
     }
 
     private fun tryToInstallBoat(button: HumanButton, boat: Boat) {
@@ -109,7 +134,6 @@ class HumanCoordGetter(
         Log.d("zzz", "showPopupForInstall")
         Log.d("zzz", app.isPopupOnScreen.toString())
         if (!app.isPopupOnScreen) {
-            Log.d("zzz", app.isPopupOnScreen.toString())
             val gravity = when {
                 button.coord.letter > 5 -> Gravity.END
                 else -> Gravity.START

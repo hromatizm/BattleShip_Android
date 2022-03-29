@@ -3,6 +3,8 @@ package com.example.battleship
 import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.content.SharedPreferences
+import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -82,8 +84,8 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
         app.restoreRobotButtonMap()
         app.robotTechField.fieldUiUpdate()
 
-        val robotTurns = TurnRobot(statusTextRobot, turnNumber)
-        val humanTurns = TurnHuman(statusTextHuman, turnNumber)
+        val robotTurns = TurnRobot(statusTextRobot, turnNumber, this)
+        val humanTurns = TurnHuman(statusTextHuman, turnNumber, this)
 
         turnSequence = TurnSequence(this, this, robotTurns, humanTurns)
         turnSequence.startListenButtons()
@@ -189,12 +191,16 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         hideSystemUI(rootView)
+
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         app.isIndex = preferences.getBoolean("show_index", true)
+        app.isSoundActive = preferences.getBoolean("sound_settings", true)
+
         app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
         app.toggleIndex(humanFieldView)
         app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
         app.toggleIndex(robotFieldView)
+
         statusTextRobot.text = textOfStatusTextRobot
         statusTextHuman.text = textOfStatusTextHuman
         turnNumber.text = textOfTurnNumber
@@ -229,4 +235,5 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
     fun goBackFromTurns(view: View) {
         onBackPressed()
     }
+
 }

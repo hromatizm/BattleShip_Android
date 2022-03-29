@@ -4,6 +4,7 @@ import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.app.Application
 import android.content.res.Resources
+import android.media.MediaPlayer
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -31,13 +32,14 @@ class MyApplication : Application() {
     var isPopupOnScreen = false // Меню поддвержения установки корабля активно
     var isConfirm = true // Нужно ли поддвержадть установку корабля
     var isIndex = true // Нужно ли отображать буквы и цифры ввокруг поля
+    var isSoundActive = true // Нужно ли проигрывать звуки
     var isHumanFieldActive = true // Является ли поле активным
     var isRobotFieldActive = false // Является ли поле активным
     var isFirstTurn = true // Для первого хода другая анимация
 
     var isFirstStartOfMainMenuActivity = true // Первый запуск MainMenuActivity
     var isFirstStartOfTurnsActivity = true // Первый запуск TurnsActivity
-    var isFirstStartOfInstallBoatsActivity = true // Первый запуск TurnsActivity
+//    var isFirstStartOfInstallBoatsActivity = true // Первый запуск TurnsActivity
     var isHumanBoatInstalled = false // Завершена расстановка кораблей игроком
 
     lateinit var humanFieldView: LinearLayout
