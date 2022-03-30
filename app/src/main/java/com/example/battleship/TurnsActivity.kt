@@ -35,9 +35,9 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var statusTextRobot: TextView
     private lateinit var statusTextHuman: TextView
     private lateinit var turnNumber: TextView
-    var textOfStatusTextRobot = ""
-    var textOfStatusTextHuman = ""
-    var textOfTurnNumber = ""
+//    var textOfStatusTextRobot = ""
+//    var textOfStatusTextHuman = ""
+//    var textOfTurnNumber = ""
     private lateinit var turnSequence: TurnSequence
     lateinit var animator: ValueAnimator
 
@@ -97,9 +97,9 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
 //            textOfStatusText = getString(STATUS_TEXT).toString()
 //        }
 
-        statusTextRobot.text = textOfStatusTextRobot
-        statusTextHuman.text = textOfStatusTextHuman
-        turnNumber.text = textOfTurnNumber
+//        statusTextRobot.text = textOfStatusTextRobot
+//        statusTextHuman.text = textOfStatusTextHuman
+//        turnNumber.text = textOfTurnNumber
 
         if (app.isFirstStartOfTurnsActivity) {
             MainScope().launch { startOver() }
@@ -201,9 +201,9 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
         app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
         app.toggleIndex(robotFieldView)
 
-        statusTextRobot.text = textOfStatusTextRobot
-        statusTextHuman.text = textOfStatusTextHuman
-        turnNumber.text = textOfTurnNumber
+        statusTextRobot.text = app.textForStatusTextHuman
+        statusTextHuman.text = app.textForStatusTextRobot
+        turnNumber.text = app.textForTurnNumber
 
 //        setOptionsButtonsFont()
     }

@@ -28,7 +28,7 @@ class MyApplication : Application() {
         }
     }
 
-    var isVertical = true // Признак вертикальности корабля при расстановке
+    var isBoatVertical = true // Признак вертикальности корабля при расстановке
     var isPopupOnScreen = false // Меню поддвержения установки корабля активно
     var isConfirm = true // Нужно ли поддвержадть установку корабля
     var isIndex = true // Нужно ли отображать буквы и цифры ввокруг поля
@@ -39,21 +39,23 @@ class MyApplication : Application() {
 
     var isFirstStartOfMainMenuActivity = true // Первый запуск MainMenuActivity
     var isFirstStartOfTurnsActivity = true // Первый запуск TurnsActivity
-//    var isFirstStartOfInstallBoatsActivity = true // Первый запуск TurnsActivity
+
+    //    var isFirstStartOfInstallBoatsActivity = true // Первый запуск TurnsActivity
     var isHumanBoatInstalled = false // Завершена расстановка кораблей игроком
+    var isLandscape = false // Какая ориентация экрана
 
     lateinit var humanFieldView: LinearLayout
     var robotFieldView: LinearLayout? = null
     lateinit var statusTextHuman: TextView
     lateinit var statusTextRobot: TextView
 
-    private val displayWidth = Resources.getSystem().displayMetrics.widthPixels.toString()
+    val displayWidth = Resources.getSystem().displayMetrics.widthPixels.toString()
     val displayHeight = Resources.getSystem().displayMetrics.heightPixels.toString()
 
-    val seaButtonSizeWithIndex = (displayWidth.toInt() / 11.5).toInt()
-    val seaButtonSizeWithoutIndex = (displayWidth.toInt() / 10.5).toInt()
-    val shrunkSeaButtonSizeWithIndex = (seaButtonSizeWithIndex * 0.66).toInt()
-    val shrunkSeaButtonSizeWithoutIndex = (seaButtonSizeWithoutIndex * 0.66).toInt()
+//    val seaButtonSizeWithIndex = (displayWidth.toInt() / 11.5).toInt()
+//    val seaButtonSizeWithoutIndex = (displayWidth.toInt() / 10.5).toInt()
+//    val shrunkSeaButtonSizeWithIndex = (seaButtonSizeWithIndex * 0.66).toInt()
+//    val shrunkSeaButtonSizeWithoutIndex = (seaButtonSizeWithoutIndex * 0.66).toInt()
 
     val humanTechField = TechField(this)
     val humanBoatFactory = BoatFactory(humanTechField)
@@ -83,6 +85,15 @@ class MyApplication : Application() {
         humanTechField.buttonMap = HumanButton.buttonMap
         robotTechField.buttonMap = RobotButton.buttonMap
     }
+
+    fun getSeaButtonSize() = when {
+        displayHeight < displayWidth && isIndex -> (displayHeight.toInt() / 11.5).toInt()
+        displayHeight < displayWidth && !isIndex -> (displayHeight.toInt() / 10.5).toInt()
+        displayHeight >= displayWidth && isIndex -> (displayWidth.toInt() / 11.5).toInt()
+        else -> (displayWidth.toInt() / 10.5).toInt()
+    }
+
+    fun getShrunkSeaButtonSize() = (getSeaButtonSize() * 0.66).toInt()
 
     fun setHumanFieldActive() {
         isHumanFieldActive = true
@@ -139,15 +150,14 @@ class MyApplication : Application() {
     // Подогнать размер клетки поля под размер экрана:
     // isActive - является ли поле активным. Не активное поле уменьшется.
     fun fitScreenSize(groupView: LinearLayout, isActive: Boolean) {
+
         val seaLines = getAllChildren(groupView)
         for (line in seaLines) {
             val lineViews = getAllChildren(line as LinearLayout)
             for (view in lineViews) {
                 view.layoutParams.height = when {
-                    isIndex && isActive -> seaButtonSizeWithIndex
-                    isIndex && !isActive -> shrunkSeaButtonSizeWithIndex
-                    !isIndex && isActive -> seaButtonSizeWithoutIndex
-                    else -> shrunkSeaButtonSizeWithoutIndex
+                    isActive -> getSeaButtonSize()
+                    else -> getShrunkSeaButtonSize()
                 }
                 view.layoutParams.width = view.layoutParams.height
             }
@@ -156,10 +166,10 @@ class MyApplication : Application() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            gravity = if (!isIndex) {
-                Gravity.CENTER_HORIZONTAL
-            } else {
-                Gravity.START
+            gravity = when {
+                !isIndex && isLandscape -> Gravity.CENTER_VERTICAL
+                !isIndex && !isLandscape -> Gravity.CENTER_HORIZONTAL
+                else -> Gravity.START
             }
         }
     }
@@ -212,17 +222,8 @@ class MyApplication : Application() {
         fieldToEnlage: LinearLayout,
         fieldToReduce: LinearLayout,
     ) {
-        val smallSize: Int
-        val largeSize: Int
-
-
-        if (isIndex) {
-            smallSize = shrunkSeaButtonSizeWithIndex
-            largeSize = seaButtonSizeWithIndex
-        } else {
-            smallSize = shrunkSeaButtonSizeWithoutIndex
-            largeSize = seaButtonSizeWithoutIndex
-        }
+        val smallSize = getShrunkSeaButtonSize()
+        val largeSize = getSeaButtonSize()
 
         val sizeGap = largeSize - smallSize
 
@@ -240,22 +241,22 @@ class MyApplication : Application() {
                 ).apply {
                     gravity = Gravity.CENTER_HORIZONTAL
                 }
-
-                val seaLinesToReduce = getAllChildren(fieldToReduce)
-                for (line in seaLinesToReduce) {
-                    getAllChildren(line as LinearLayout).forEach {
-                        it.layoutParams.height =
-                            largeSize - animation.animatedValue as Int
-                        it.layoutParams.width = it.layoutParams.height
-                    }
-                    fieldToReduce.layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        gravity = Gravity.CENTER_HORIZONTAL
-                    }
+            }
+            val seaLinesToReduce = getAllChildren(fieldToReduce)
+            for (line in seaLinesToReduce) {
+                getAllChildren(line as LinearLayout).forEach {
+                    it.layoutParams.height =
+                        largeSize - animation.animatedValue as Int
+                    it.layoutParams.width = it.layoutParams.height
+                }
+                fieldToReduce.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.CENTER_HORIZONTAL
                 }
             }
+
             getAllChildren(fieldToEnlage).forEach { it.requestLayout() }
             getAllChildren(fieldToReduce).forEach { it.requestLayout() }
         }

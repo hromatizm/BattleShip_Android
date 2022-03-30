@@ -9,17 +9,13 @@
     android:orientation="vertical"
     tools:context=".ConfirmNewGameActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
         <TextView
             android:id="@+id/exit_text"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="10dp"
+            android:paddingVertical="10dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="20dp"
             android:autoSizeMaxTextSize="90sp"
             android:autoSizeMinTextSize="40sp"
             android:autoSizeStepGranularity="1sp"
@@ -30,7 +26,6 @@
             android:text="Хотите начать игру заново?"
             android:textColor="@color/light_sky_blue"
             android:textStyle="bold" />
-    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -13,7 +13,6 @@ import com.example.battleship.MyApplication
 import com.example.battleship.R
 import com.example.battleship.TurnsActivity
 import com.example.battleship.seabutton.HumanButton
-import com.example.battleship.seabutton.SeaButton
 
 class HumanCoordGetter(
     private val context: Context?,
@@ -29,7 +28,7 @@ class HumanCoordGetter(
 
     init {
         if (!app.isHumanBoatInstalled)
-            boatTemp = Boat(app.listOfHumanBoatsId[0], Coordinate(1, 1), app.isVertical)
+            boatTemp = Boat(app.listOfHumanBoatsId[0], Coordinate(1, 1), app.isBoatVertical)
     }
 
     fun onClickForInstall(view: View) {
@@ -42,7 +41,7 @@ class HumanCoordGetter(
                 val last =
                     boatTemp.coordinates[i - 1] // Берем последнюю координату из коллекции
                 val new = when { // На ее основе создаем новую
-                    app.isVertical -> Coordinate(last.letter, last.number + 1)
+                    app.isBoatVertical -> Coordinate(last.letter, last.number + 1)
                     else -> Coordinate(last.letter + 1, last.number)
                 }
                 boatTemp.coordinates[i] = (new)
@@ -111,7 +110,7 @@ class HumanCoordGetter(
             boatTemp = Boat(
                 app.listOfHumanBoatsId[0],
                 Coordinate(1, 1),
-                app.isVertical
+                app.isBoatVertical
             )
         } else { // Расстановка завершена
             installer.printReady()

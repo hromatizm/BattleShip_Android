@@ -3,10 +3,12 @@ package com.example.battleship
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -31,13 +33,24 @@ class MainMenuActivity : AppCompatActivity() {
         app = MyApplication.getAppInstance()
 
         // Делаем фулл-скрин
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+//        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+        // Прозрачный Navigation bar:
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+
+        // Скрываем Tool bar:
         supportActionBar?.hide()
+
+
         setContentView(R.layout.activity_main_menu)
 
 ///////////////////////////////////////////////////////////////
@@ -53,7 +66,7 @@ class MainMenuActivity : AppCompatActivity() {
 
         titleAnimation = ObjectAnimator
             .ofFloat(
-                title, "translationY",  (-1) * app.displayHeight.toFloat() , 150f
+                title, "translationY",  (-1) * app.displayHeight.toFloat() , buttonStartY
             ).setDuration(1000)
 
         buttonStartAnimation = ObjectAnimator

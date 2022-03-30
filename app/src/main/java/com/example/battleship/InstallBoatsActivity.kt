@@ -6,8 +6,10 @@ import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.preference.PreferenceManager
 import android.view.*
 import android.widget.LinearLayout
@@ -46,6 +48,8 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 
     private lateinit var humanInstaller: BoatInstaller
     private lateinit var robotInstaller: BoatInstaller
+
+    private lateinit var configuration: Configuration
 
     var animator = ValueAnimator().setDuration(1_000)
     private var endValue by Delegates.notNull<Int>()
@@ -93,11 +97,11 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 
         radioButtonHorizontal = findViewById(R.id.horizontal_button)
         radioButtonVertical = findViewById(R.id.vertical_button)
-        radioButtonVertical.isChecked = app.isVertical
-        radioButtonHorizontal.isChecked = !app.isVertical
+        radioButtonVertical.isChecked = app.isBoatVertical
+        radioButtonHorizontal.isChecked = !app.isBoatVertical
 
         radioButtonVertical.setOnCheckedChangeListener { _, isChecked ->
-            app.isVertical = when {
+            app.isBoatVertical = when {
                 isChecked -> true
                 else -> false
             }
@@ -139,16 +143,22 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
                     it.layoutParams.height = animation.animatedValue as Int
                     it.layoutParams.width = it.layoutParams.height
                 }
-                humanFieldView.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    gravity = if (!app.isIndex) {
-                        Gravity.CENTER_HORIZONTAL
-                    } else {
-                        Gravity.START
-                    }
+            }
+            humanFieldView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = if (app.isIndex) {
+                    Gravity.START
+                } else {
+                    Gravity.CENTER
                 }
+                marginEnd = if (app.isLandscape) {
+                    100
+                } else {
+                    0
+                }
+                marginStart = marginEnd
                 app.getAllChildren(humanFieldView).forEach { it.requestLayout() }
             }
         }
@@ -184,6 +194,10 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
     override fun onStart() {
         super.onStart()
         coordGetterController.startListenButtons()
+        configuration = resources.configuration
+        app.isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+//        Log.d("zzz1",app.isLandscape.toString())
+//        Log.d("zzz1", app.getSeaButtonSize().toString())
     }
 
     override fun onResume() {
@@ -200,11 +214,9 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 
         app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
         app.toggleIndex(humanFieldView)
-        endValue = if (app.isIndex) {
-            app.seaButtonSizeWithIndex
-        } else {
-            app.seaButtonSizeWithoutIndex
-        }
+//        Log.d("zzz2",app.isLandscape.toString())
+//        Log.d("zzz2", app.getSeaButtonSize().toString())
+        endValue = app.getSeaButtonSize()
 
         animationInit()
         animator.doOnStart {

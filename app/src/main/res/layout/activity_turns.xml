@@ -28,11 +28,13 @@
             android:id="@+id/back"
             style="@style/Toolbar_Button"
             android:onClick="goBackFromTurns"
+            android:layout_marginHorizontal="20dp"
             app:icon="@drawable/ic_baseline_arrow_back_24" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/settings"
             style="@style/Toolbar_Button"
+            android:layout_marginHorizontal="20dp"
             android:onClick="showSettings"
             app:icon="@drawable/ic_baseline_settings_24" />
 

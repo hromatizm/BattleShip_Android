@@ -6,7 +6,6 @@ import com.example.battleship.MyApplication
 import com.example.battleship.coordinates.Coordinate
 import com.example.battleship.coordinates.GetCoord
 import com.example.battleship.fields.TechField4Algorithm
-import kotlin.properties.Delegates
 
 // Расстановщик кораблей на поле
 open class BoatInstaller(
@@ -18,7 +17,7 @@ open class BoatInstaller(
     val app = MyApplication.getAppInstance()
 
     fun installHuman(coord: Coordinate) {
-        val boat = factory.makeBoat(app.listOfHumanBoatsId.removeFirst(), coord, app.isVertical)
+        val boat = factory.makeBoat(app.listOfHumanBoatsId.removeFirst(), coord, app.isBoatVertical)
         if (app.listOfHumanBoatsId.isEmpty()) {
             app.isHumanBoatInstalled = true
             techField.update()

@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/first"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/sky_blue"
     android:orientation="vertical"
-    tools:context=".ConfirmExitActivity">
+    tools:context=".ConfirmNewGameActivity">
 
     <TextView
         android:id="@+id/exit_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_marginHorizontal="20dp"
         android:layout_weight="1"
-        android:autoSizeMaxTextSize="90sp"
-        android:autoSizeMinTextSize="40sp"
+        android:autoSizeMaxTextSize="60sp"
+        android:autoSizeMinTextSize="30sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
         android:fontFamily="@font/righteous"
         android:gravity="center"
-        android:maxLines="2"
-        android:text="Хотите выйти из игры?"
+        android:maxLines="1"
+        android:paddingHorizontal="40dp"
+        android:text="Хотите начать игру заново?"
         android:textColor="@color/light_sky_blue"
         android:textStyle="bold" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:padding="20dp">
 
         <com.google.android.material.button.MaterialButton
@@ -38,15 +39,24 @@
             style="@style/Main_Menu_Button"
             android:onClick="returnToGame"
             android:text="Нет"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/button_no"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_no"
             style="@style/Main_Menu_Button"
-            android:layout_below="@+id/button_yes"
-            android:onClick="exitGame"
+            android:onClick="newGame"
             android:text="Да"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_yes" />
 
-    </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

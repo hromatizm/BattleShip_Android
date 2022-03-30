@@ -14,37 +14,19 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <!--        <com.google.android.material.button.MaterialButton-->
-        <!--            android:id="@+id/confirm_toggle"-->
-        <!--            style="@style/Options_Button"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:onClick="confirmToggle"-->
-        <!--            android:text="@string/option_confirm"-->
-        <!--            android:textAllCaps="false" />-->
-
-        <!--        <com.google.android.material.button.MaterialButton-->
-        <!--            android:id="@+id/index_toggle"-->
-        <!--            style="@style/Options_Button"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:onClick="indexToggle"-->
-        <!--            android:text="@string/option_use_index"-->
-        <!--            android:textAllCaps="false" />-->
-
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back"
             style="@style/Toolbar_Button"
+            android:layout_marginHorizontal="20dp"
             android:onClick="goBackFromInstall"
             app:icon="@drawable/ic_baseline_arrow_back_24" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/settings"
             style="@style/Toolbar_Button"
+            android:layout_marginHorizontal="20dp"
             android:onClick="showSettings"
             app:icon="@drawable/ic_baseline_settings_24" />
-
 
     </LinearLayout>
 
