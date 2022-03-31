@@ -18,6 +18,8 @@
     <string name="i">И</string>
     <string name="g">К</string>
 
+    <string name="install_boat">Поставьте %1$s %2$d-палубный…</string>
+
     <string name="turn_number">Ход %1$d</string>
     <string name="turn_fail">Ход № %1$d - мимо</string>
     <string name="turn_scored">Ход № %1$d - ранен</string>

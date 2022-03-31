@@ -15,13 +15,14 @@
         <entry key="app/src/main/res/layout-land/activity_confirm_new_game.xml" value="0.176" />
         <entry key="app/src/main/res/layout-land/activity_install_boats.xml" value="0.152" />
         <entry key="app/src/main/res/layout-land/activity_main_menu.xml" value="0.4" />
+        <entry key="app/src/main/res/layout-land/activity_turns.xml" value="0.176" />
         <entry key="app/src/main/res/layout-v26/activity_install_boats.xml" value="0.24592391304347827" />
         <entry key="app/src/main/res/layout/activity_confirm_exit.xml" value="0.4026268115942029" />
         <entry key="app/src/main/res/layout/activity_confirm_new_game.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_install_boats.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_main_menu.xml" value="0.176" />
-        <entry key="app/src/main/res/layout/activity_turns.xml" value="0.4" />
+        <entry key="app/src/main/res/layout/activity_turns.xml" value="0.2" />
         <entry key="app/src/main/res/layout/human_field.xml" value="0.1" />
         <entry key="app/src/main/res/layout/human_field_view.xml" value="0.176" />
         <entry key="app/src/main/res/layout/letters_line.xml" value="0.25" />

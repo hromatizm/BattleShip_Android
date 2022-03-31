@@ -4,6 +4,7 @@ import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -35,11 +37,14 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var statusTextRobot: TextView
     private lateinit var statusTextHuman: TextView
     private lateinit var turnNumber: TextView
-//    var textOfStatusTextRobot = ""
+
+    //    var textOfStatusTextRobot = ""
 //    var textOfStatusTextHuman = ""
 //    var textOfTurnNumber = ""
     private lateinit var turnSequence: TurnSequence
     lateinit var animator: ValueAnimator
+
+    private lateinit var configuration: Configuration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -196,6 +201,7 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
         app.isIndex = preferences.getBoolean("show_index", true)
         app.isSoundActive = preferences.getBoolean("sound_settings", true)
 
+
         app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
         app.toggleIndex(humanFieldView)
         app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
@@ -206,6 +212,29 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
         turnNumber.text = app.textForTurnNumber
 
 //        setOptionsButtonsFont()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        configuration = resources.configuration
+        app.isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        if (app.isLandscape) {
+            app.setRobotFieldActive()
+        }
+        if (app.isGameOver) {
+            app.statusTextHuman.visibility = View.GONE
+            app.statusTextRobot.visibility = View.GONE
+            turnNumber.setTextColor(
+                ContextCompat.getColor(app.applicationContext, R.color.red)
+            )
+            if (app.isLandscape) {
+                val params = turnNumber.layoutParams
+                params.height = 200
+            }
+        }
+
+//        Log.d("zzz1",app.isLandscape.toString())
+//        Log.d("zzz1", app.getSeaButtonSize().toString())
     }
 
     override fun onBackPressed() {

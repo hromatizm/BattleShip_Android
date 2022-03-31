@@ -1,11 +1,10 @@
 package com.example.battleship.turns
 
 import android.content.Context
-import android.media.MediaActionSound
 import android.media.MediaPlayer
-import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.battleship.MyApplication
 import com.example.battleship.R
@@ -31,7 +30,7 @@ class TurnHuman(
     override suspend fun makeTurn(turnCoord: Coordinate?): Pair<Boolean, Int> {
         app.turnSequence.stopListenButtons()
         withContext(Dispatchers.Main) {
-            turnNumber.text = statusText.context.getString(R.string.turn_number, app.turnsCounter)
+            turnNumber.text = context.getString(R.string.turn_number, app.turnsCounter)
         }
 //            if (isHuman) View.topLabel.text = "Ваш ход"
         var isScored = false // Признак, что "попал" в корабль
@@ -78,14 +77,18 @@ class TurnHuman(
                                 fieldUiUpdate()
                             }
                         }
+                        app.isGameOver = true
                         statusText.visibility = View.GONE
                         app.statusTextRobot.visibility = View.GONE
                         turnNumber.setTextColor(
                             ContextCompat.getColor(app.applicationContext, R.color.red)
                         )
                         withContext(Dispatchers.Main) {
+                            val params = turnNumber.layoutParams
+                            params.height = 200
+                            turnNumber.layoutParams = params
                             turnNumber.text =
-                                statusText.context.getString(R.string.game_over, app.turnsCounter)
+                                context.getString(R.string.game_over, app.turnsCounter)
                         }
                         return false to app.turnsCounter
                     }

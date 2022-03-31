@@ -3,6 +3,7 @@ package com.example.battleship.boats
 import android.content.Context
 import android.widget.TextView
 import com.example.battleship.MyApplication
+import com.example.battleship.R
 import com.example.battleship.coordinates.Coordinate
 import com.example.battleship.coordinates.GetCoord
 import com.example.battleship.fields.TechField4Algorithm
@@ -38,7 +39,7 @@ open class BoatInstaller(
             size < 4 -> "$num-й "
             else -> ""
         }
-        welcomeText?.text = ("Поставьте $boatNumber $size-палубный...")
+        welcomeText?.text = context?.getString(R.string.install_boat, boatNumber,size)
     }
 
     fun printReady() {

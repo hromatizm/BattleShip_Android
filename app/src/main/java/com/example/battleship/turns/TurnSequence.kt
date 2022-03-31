@@ -32,8 +32,16 @@ class TurnSequence(
 
     suspend fun robotTurn() {
         app.robotTechField.makeUiGray()
-        app.setHumanFieldActive()
-        if (app.isFirstTurn) {
+        Log.d("zzz", "isLandscape ${app.isLandscape}")
+
+        when {
+            app.isLandscape -> app.setRobotFieldActive()
+            else -> app.setHumanFieldActive()
+        }
+        Log.d("zzz", "isRobotFieldActive ${app.isRobotFieldActive}")
+        Log.d("zzz", "isHumanFieldActive ${app.isHumanFieldActive}")
+        if (app.isFirstTurn || app.isLandscape) {
+            Log.d("zzz", "here")
             app.fitScreenSize(app.humanFieldView, app.isHumanFieldActive)
             app.robotFieldView?.let { app.fitScreenSize(it, app.isRobotFieldActive) }
             app.isFirstTurn = false
@@ -51,11 +59,19 @@ class TurnSequence(
         if (isGoingOn) {
             startListenButtons()
             app.setRobotFieldActive()
-            withContext(Dispatchers.Main) {
-                app.robotFieldView?.let { app.turnActivityAnimationInit(it, app.humanFieldView) }
-                app.turnsActivityAnimator.start()
-                app.turnsActivityAnimator.doOnEnd {
-                    app.robotTechField.fieldUiUpdate()
+            if (app.isLandscape) {
+                app.fitScreenSize(app.humanFieldView, app.isHumanFieldActive)
+                app.robotFieldView?.let { app.fitScreenSize(it, app.isRobotFieldActive) }
+                app.robotTechField.fieldUiUpdate()
+            } else {
+                withContext(Dispatchers.Main) {
+                    app.robotFieldView?.let {
+                        app.turnActivityAnimationInit(it, app.humanFieldView)
+                    }
+                    app.turnsActivityAnimator.start()
+                    app.turnsActivityAnimator.doOnEnd {
+                        app.robotTechField.fieldUiUpdate()
+                    }
                 }
             }
         } else {

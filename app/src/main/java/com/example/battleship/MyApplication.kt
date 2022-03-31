@@ -4,10 +4,8 @@ import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.app.Application
 import android.content.res.Resources
-import android.media.MediaPlayer
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.battleship.boats.BoatFactory
@@ -36,6 +34,7 @@ class MyApplication : Application() {
     var isHumanFieldActive = true // Является ли поле активным
     var isRobotFieldActive = false // Является ли поле активным
     var isFirstTurn = true // Для первого хода другая анимация
+    var isGameOver = false // Для перерисовки интерфейса при повроте экрана после конца игры
 
     var isFirstStartOfMainMenuActivity = true // Первый запуск MainMenuActivity
     var isFirstStartOfTurnsActivity = true // Первый запуск TurnsActivity
@@ -63,7 +62,7 @@ class MyApplication : Application() {
     val robotTechField = TechField(this)
     val robotBoatFactory = BoatFactory(robotTechField)
 
-    val listOfHumanBoatsId = mutableListOf(41, 31, 32, 21, 22, 23, 11, 12, 13, 14)
+    val listOfHumanBoatsId = mutableListOf(41/*, 31, 32, 21, 22, 23, 11, 12, 13, 14*/)
     val listOfRobotBoatsId = mutableListOf(41, 31, 32, 21, 22, 23, 11, 12, 13, 14)
 
     private var isHumanButtonMapSaved = false
@@ -160,47 +159,20 @@ class MyApplication : Application() {
                     else -> getShrunkSeaButtonSize()
                 }
                 view.layoutParams.width = view.layoutParams.height
-            }
-        }
-        groupView.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = when {
-                !isIndex && isLandscape -> Gravity.CENTER_VERTICAL
-                !isIndex && !isLandscape -> Gravity.CENTER_HORIZONTAL
-                else -> Gravity.START
-            }
-        }
-    }
 
-    // Перерисовка обоих игровых полей - ативное становится большим, неактивное - маленьким
-    fun resizeFields() {
-        fitScreenSize(humanFieldView, isHumanFieldActive)
-        robotFieldView?.let { fitScreenSize(it, isRobotFieldActive) }
-        getAllChildren(humanFieldView).forEach { it.requestLayout() }
-        robotFieldView?.let { getAllChildren(it).forEach { it.requestLayout() } }
-    }
-
-    fun animateFieldResize(groupView: LinearLayout, newSize: Int) {
-        val seaLines = getAllChildren(groupView)
-        for (line in seaLines) {
-            val lineViews = getAllChildren(line as LinearLayout)
-            for (view in lineViews) {
-                view.layoutParams.height = newSize
-                view.layoutParams.width = newSize
+                view.requestLayout()
             }
         }
-        groupView.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = if (!isIndex) {
-                Gravity.CENTER_HORIZONTAL
-            } else {
-                Gravity.START
-            }
-        }
+//        groupView.layoutParams = LinearLayout.LayoutParams(
+//            LinearLayout.LayoutParams.WRAP_CONTENT,
+//            LinearLayout.LayoutParams.WRAP_CONTENT
+//        ).apply {
+//            gravity = when {
+//                !isIndex && isLandscape -> Gravity.CENTER
+//                !isIndex && !isLandscape -> Gravity.CENTER
+//                else -> Gravity.START
+//            }
+//        }
     }
 
     // Вкл - Выкл индекс вокруг поля (буквы и цифры)
@@ -219,7 +191,7 @@ class MyApplication : Application() {
     }
 
     fun turnActivityAnimationInit(
-        fieldToEnlage: LinearLayout,
+        fieldToEnlarge: LinearLayout,
         fieldToReduce: LinearLayout,
     ) {
         val smallSize = getShrunkSeaButtonSize()
@@ -229,18 +201,19 @@ class MyApplication : Application() {
 
         turnsActivityAnimator.setObjectValues(0, sizeGap)
         turnsActivityAnimator.addUpdateListener { animation ->
-            val seaLinesToEnlarge = getAllChildren(fieldToEnlage)
+            val seaLinesToEnlarge = getAllChildren(fieldToEnlarge)
             for (line in seaLinesToEnlarge) {
                 getAllChildren(line as LinearLayout).forEach {
                     it.layoutParams.height = smallSize + animation.animatedValue as Int
                     it.layoutParams.width = it.layoutParams.height
+                    it.requestLayout()
                 }
-                fieldToEnlage.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    gravity = Gravity.CENTER_HORIZONTAL
-                }
+//                fieldToEnlarge.layoutParams = LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.WRAP_CONTENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT
+//                ).apply {
+//                    gravity = Gravity.CENTER
+//                }
             }
             val seaLinesToReduce = getAllChildren(fieldToReduce)
             for (line in seaLinesToReduce) {
@@ -248,16 +221,17 @@ class MyApplication : Application() {
                     it.layoutParams.height =
                         largeSize - animation.animatedValue as Int
                     it.layoutParams.width = it.layoutParams.height
+                    it.requestLayout()
                 }
-                fieldToReduce.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    gravity = Gravity.CENTER_HORIZONTAL
-                }
+//                fieldToReduce.layoutParams = LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.WRAP_CONTENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT
+//                ).apply {
+//                    gravity = Gravity.CENTER
+//                }
             }
 
-            getAllChildren(fieldToEnlage).forEach { it.requestLayout() }
+            getAllChildren(fieldToEnlarge).forEach { it.requestLayout() }
             getAllChildren(fieldToReduce).forEach { it.requestLayout() }
         }
 
@@ -295,5 +269,34 @@ class MyApplication : Application() {
     override fun onCreate() {
         appInstance = this
         super.onCreate()
+    }
+
+    // Перерисовка обоих игровых полей - ативное становится большим, неактивное - маленьким
+    fun resizeFields() {
+        fitScreenSize(humanFieldView, isHumanFieldActive)
+        robotFieldView?.let { fitScreenSize(it, isRobotFieldActive) }
+        getAllChildren(humanFieldView).forEach { it.requestLayout() }
+        robotFieldView?.let { getAllChildren(it).forEach { it.requestLayout() } }
+    }
+
+    fun animateFieldResize(groupView: LinearLayout, newSize: Int) {
+        val seaLines = getAllChildren(groupView)
+        for (line in seaLines) {
+            val lineViews = getAllChildren(line as LinearLayout)
+            for (view in lineViews) {
+                view.layoutParams.height = newSize
+                view.layoutParams.width = newSize
+            }
+        }
+        groupView.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = if (!isIndex) {
+                Gravity.CENTER
+            } else {
+                Gravity.START
+            }
+        }
     }
 }
