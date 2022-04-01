@@ -41,6 +41,14 @@
     <string name="vertical">Вертикальный</string>
     <string name="sound_settings">Звуки</string>
     <string name="sound_toggle">Включить звуки</string>
+    <string name="vibration_settings">Вибрация</string>
+    <string name="vibration_toggle">Вибрация при попадании в корабль</string>
+
+
+    <string name="confirm_install_key">confirm_install_key</string>
+    <string name="show_index_key">show_index_key</string>
+    <string name="sound_settings_key">sound_settings_key</string>
+    <string name="vibration_settings_key">vibration_settings_key</string>
 
 
 </resources>

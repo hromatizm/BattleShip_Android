@@ -13,6 +13,9 @@ import com.example.battleship.MyApplication
 import com.example.battleship.R
 import com.example.battleship.TurnsActivity
 import com.example.battleship.seabutton.HumanButton
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class HumanCoordGetter(
     private val context: Context?,
@@ -62,11 +65,10 @@ class HumanCoordGetter(
                         isTryToInstall = true
                         app.isPopupOnScreen = false
                     }
-
         }
         if (isTryToInstall) {
             tryToInstallBoat(button, boatTemp)
-            if(app.isSoundActive) {
+            if (app.isSoundActive) {
                 if (installSound.isPlaying) {
                     installSound.stop()
                     installSound.release()
@@ -76,7 +78,7 @@ class HumanCoordGetter(
             }
 
         } else {
-            if(app.isSoundActive) {
+            if (app.isSoundActive) {
                 if (bumpSound.isPlaying) {
                     bumpSound.stop()
                     bumpSound.release()
@@ -91,11 +93,13 @@ class HumanCoordGetter(
         if (app.isConfirm) {
             showPopupForInstall(button, boat)
         } else {
-            installBoat(button, boat)
+            MainScope().launch {
+                installBoat(button, boat)
+            }
         }
     }
 
-    private fun installBoat(button: HumanButton, boat: Boat) {
+    suspend fun installBoat(button: HumanButton, boat: Boat) {
         if (boat.coordEnd.letter <= 10 && boatTemp.coordEnd.number <= 10)
             installer.installHuman(button.coord)
         HumanButton.buttonMap.values.filter { it.coord in boatTemp.coordinates }
@@ -117,7 +121,9 @@ class HumanCoordGetter(
             HumanButton.buttonCounter = 0
             app.saveHumanButtonMap()
             BoatInstaller(app.robotBoatFactory, null, null).installAllRobot()
+            delay(1000)
             runTurnsActivity()
+
         }
     }
 
@@ -144,7 +150,9 @@ class HumanCoordGetter(
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.popup_confirm -> {
-                        installBoat(button, boat)
+                        MainScope().launch {
+                            installBoat(button, boat)
+                        }
                         true
                     }
                     R.id.popup_cancel -> {

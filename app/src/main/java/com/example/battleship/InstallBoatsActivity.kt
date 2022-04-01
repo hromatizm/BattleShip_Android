@@ -24,6 +24,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.example.battleship.boats.BoatInstaller
 import com.example.battleship.coordinates.HumanCoordGetter
 import com.example.battleship.seabutton.HumanButton
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
@@ -131,7 +133,9 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         }
 
         app.restoreHumanButtonMap()
-        app.humanTechField.fieldUiUpdate()
+        MainScope().launch {
+            app.humanTechField.fieldUiUpdate()
+        }
     }
 
     private fun animationInit() {
@@ -206,16 +210,19 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         hideSystemUI(root)
 //        setOptionsButtonsFont()
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-
-        app.isIndex = preferences.getBoolean("show_index", true)
-        app.isConfirm = preferences.getBoolean("confirm_install", true)
-        app.isSoundActive = preferences.getBoolean("sound_settings", true)
         preferences.registerOnSharedPreferenceChangeListener(this)
+        app.isConfirm =
+            preferences.getBoolean(getString(R.string.confirm_install_key), true)
+        app.isIndex =
+            preferences.getBoolean(getString(R.string.show_index_key), true)
+        app.isSoundActive =
+            preferences.getBoolean(getString(R.string.sound_settings_key), true)
+        app.isVibrationActive =
+            preferences.getBoolean(getString(R.string.vibration_settings_key), true)
+
 
         app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
         app.toggleIndex(humanFieldView)
-//        Log.d("zzz2",app.isLandscape.toString())
-//        Log.d("zzz2", app.getSeaButtonSize().toString())
         endValue = app.getSeaButtonSize()
 
         animationInit()
@@ -285,9 +292,15 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        app.isIndex = sharedPreferences.getBoolean("show_index", true)
-        app.isConfirm = sharedPreferences.getBoolean("confirm_install", true)
-        app.isSoundActive = sharedPreferences.getBoolean("sound_settings", true)
+
+        app.isConfirm =
+            sharedPreferences.getBoolean(getString(R.string.confirm_install_key), true)
+        app.isIndex =
+            sharedPreferences.getBoolean(getString(R.string.show_index_key), true)
+        app.isSoundActive =
+            sharedPreferences.getBoolean(getString(R.string.sound_settings_key), true)
+        app.isVibrationActive =
+            sharedPreferences.getBoolean(getString(R.string.vibration_settings_key), true)
     }
 
     fun goBackFromInstall(view: View) {

@@ -4,6 +4,10 @@ import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.app.Application
 import android.content.res.Resources
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -31,6 +35,7 @@ class MyApplication : Application() {
     var isConfirm = true // Нужно ли поддвержадть установку корабля
     var isIndex = true // Нужно ли отображать буквы и цифры ввокруг поля
     var isSoundActive = true // Нужно ли проигрывать звуки
+    var isVibrationActive = true // Использовать вибрацию
     var isHumanFieldActive = true // Является ли поле активным
     var isRobotFieldActive = false // Является ли поле активным
     var isFirstTurn = true // Для первого хода другая анимация
@@ -62,7 +67,7 @@ class MyApplication : Application() {
     val robotTechField = TechField(this)
     val robotBoatFactory = BoatFactory(robotTechField)
 
-    val listOfHumanBoatsId = mutableListOf(41/*, 31, 32, 21, 22, 23, 11, 12, 13, 14*/)
+    val listOfHumanBoatsId = mutableListOf(41, 31, 32, 21, 22, 23, 11, 12, 13, 14)
     val listOfRobotBoatsId = mutableListOf(41, 31, 32, 21, 22, 23, 11, 12, 13, 14)
 
     private var isHumanButtonMapSaved = false
@@ -80,9 +85,31 @@ class MyApplication : Application() {
     var textForStatusTextHuman = ""
     var textForTurnNumber = ""
 
+    lateinit var vibrator: Vibrator
+
     init {
         humanTechField.buttonMap = HumanButton.buttonMap
         robotTechField.buttonMap = RobotButton.buttonMap
+    }
+
+    fun vibrateShort() {
+        vibrator.vibrate(
+            VibrationEffect.createWaveform(
+                longArrayOf(200, 100, 100, 100),
+                intArrayOf(0, 255, 0, 255),
+                -1
+            )
+        )
+    }
+
+    fun vibrateLong() {
+        vibrator.vibrate(
+            VibrationEffect.createWaveform(
+                longArrayOf(200, 200, 100, 200, 100, 200),
+                intArrayOf(0, 255, 0, 255, 0, 255),
+                -1
+            )
+        )
     }
 
     fun getSeaButtonSize() = when {

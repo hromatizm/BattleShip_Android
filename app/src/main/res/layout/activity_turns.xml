@@ -42,6 +42,7 @@
             android:layout_marginHorizontal="20dp"
             android:onClick="showSettings"
             app:icon="@drawable/ic_baseline_settings_24" />
+           />
 
     </LinearLayout>
 

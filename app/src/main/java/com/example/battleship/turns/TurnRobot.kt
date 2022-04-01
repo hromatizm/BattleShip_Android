@@ -55,7 +55,7 @@ class TurnRobot(
                 boat?.liveMinus() // Сокращаем жизнь
                 if (boat?.lives!! == 0) { // Если убит
                     withContext(Dispatchers.Main) {
-                        if(app.isSoundActive) {
+                        if (app.isSoundActive) {
                             if (explosionLongSound.isPlaying) {
                                 explosionLongSound.stop()
                                 explosionLongSound.release()
@@ -63,6 +63,9 @@ class TurnRobot(
                                     MediaPlayer.create(context, R.raw.explosion_long)
                             }
                             explosionLongSound.start()
+                            if (app.isVibrationActive) {
+                                app.vibrateLong()
+                            }
                         }
                         statusText.text =
                             "Убил"
@@ -102,7 +105,8 @@ class TurnRobot(
                     }
                 } else { // Если попал, но остались жизни
                     withContext(Dispatchers.Main) {
-                        if(app.isSoundActive) {
+
+                        if (app.isSoundActive) {
                             if (explosionShortSound.isPlaying) {
                                 explosionShortSound.stop()
                                 explosionShortSound.release()
@@ -110,6 +114,9 @@ class TurnRobot(
                                     MediaPlayer.create(context, R.raw.explosion_short)
                             }
                             explosionShortSound.start()
+                            if (app.isVibrationActive) {
+                                app.vibrateShort()
+                            }
                         }
                         statusText.text =
                             "Ранил"
@@ -122,7 +129,7 @@ class TurnRobot(
             }
             else -> {
                 withContext(Dispatchers.Main) {
-                    if(app.isSoundActive) {
+                    if (app.isSoundActive) {
                         if (failSound.isPlaying) {
                             failSound.stop()
                             failSound.release()

@@ -3,22 +3,33 @@
 
     <PreferenceCategory android:title="@string/boat_installing">
         <SwitchPreferenceCompat
-
-            app:key="confirm_install"
+            android:defaultValue="true"
+            app:key="@string/confirm_install_key"
             app:singleLineTitle="false"
             app:title="@string/confirm_install" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/field_look">
         <SwitchPreferenceCompat
-            app:key="show_index"
+            android:defaultValue="true"
+            app:key="@string/show_index_key"
             app:singleLineTitle="false"
             app:title="@string/show_index" />
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/sound_settings">
         <SwitchPreferenceCompat
-            app:key="sound_settings"
+            android:defaultValue="true"
+            app:key="@string/sound_settings_key"
             app:singleLineTitle="false"
             app:title="@string/sound_toggle" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/vibration_settings">
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            app:key="@string/vibration_settings_key"
+            app:singleLineTitle="false"
+            app:title="@string/vibration_toggle" />
     </PreferenceCategory>
 </PreferenceScreen>

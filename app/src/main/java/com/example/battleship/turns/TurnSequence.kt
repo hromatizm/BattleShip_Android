@@ -10,9 +10,7 @@ import com.example.battleship.MyApplication
 import com.example.battleship.TurnsActivity
 import com.example.battleship.coordinates.Coordinate
 import com.example.battleship.seabutton.RobotButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 // Поочередные ходы. Получает в качестве параметра коллекцию типа Turn
 class TurnSequence(
@@ -32,16 +30,11 @@ class TurnSequence(
 
     suspend fun robotTurn() {
         app.robotTechField.makeUiGray()
-        Log.d("zzz", "isLandscape ${app.isLandscape}")
-
         when {
             app.isLandscape -> app.setRobotFieldActive()
             else -> app.setHumanFieldActive()
         }
-        Log.d("zzz", "isRobotFieldActive ${app.isRobotFieldActive}")
-        Log.d("zzz", "isHumanFieldActive ${app.isHumanFieldActive}")
         if (app.isFirstTurn || app.isLandscape) {
-            Log.d("zzz", "here")
             app.fitScreenSize(app.humanFieldView, app.isHumanFieldActive)
             app.robotFieldView?.let { app.fitScreenSize(it, app.isRobotFieldActive) }
             app.isFirstTurn = false
