@@ -44,6 +44,15 @@ class ConfirmNewGameActivity : AppCompatActivity() {
     }
 
     fun returnToGame(view: View) {
-        onBackPressed()
+        startActivity(
+            Intent(this,MainMenuActivity::class.java)
+        )
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(
+            Intent(this,MainMenuActivity::class.java)
+        )
     }
 }

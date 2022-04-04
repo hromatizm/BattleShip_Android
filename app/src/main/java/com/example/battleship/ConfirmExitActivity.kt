@@ -1,5 +1,6 @@
 package com.example.battleship
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -33,7 +34,15 @@ class ConfirmExitActivity : AppCompatActivity() {
         this.finishAffinity()
     }
     fun returnToGame(view: View) {
-        onBackPressed()
+        startActivity(
+            Intent(this,MainMenuActivity::class.java)
+        )
+    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(
+            Intent(this,MainMenuActivity::class.java)
+        )
     }
 }

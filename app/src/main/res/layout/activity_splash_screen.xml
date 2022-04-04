@@ -2,8 +2,78 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splash_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FF9900"
+    android:alpha="0"
     tools:context=".SplashScreenActivity">
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/letter0"-->
+    <!--        style="@style/Splash_Screen_TextView"-->
+    <!--        android:layout_width="5dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintHorizontal_chainStyle="packed"-->
+    <!--        -->
+    <!--        app:layout_constraintRight_toLeftOf="@id/letter1"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <TextView
+        android:id="@+id/letter1"
+        style="@style/Splash_Screen_TextView"
+        android:text="   "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/letter2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/letter2"
+        style="@style/Splash_Screen_TextView"
+        android:text="   "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/letter1"
+        app:layout_constraintRight_toLeftOf="@id/letter3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/letter3"
+        style="@style/Splash_Screen_TextView"
+        android:text="   "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/letter2"
+        app:layout_constraintRight_toLeftOf="@id/letter4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/letter4"
+        style="@style/Splash_Screen_TextView"
+        android:text="   "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/letter3"
+        app:layout_constraintRight_toLeftOf="@id/letter5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/letter5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:alpha="0"
+        android:background="@drawable/rounded_letter"
+        android:fontFamily="serif-monospace"
+        android:gravity="center"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:text="Щ"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:cornerRadius="28dp"
+        app:layout_constraintLeft_toRightOf="@id/letter4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/letter4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

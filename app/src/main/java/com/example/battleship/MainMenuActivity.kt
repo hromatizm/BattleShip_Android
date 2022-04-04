@@ -110,7 +110,7 @@ class MainMenuActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    fun onExitButtonClick(view: View) {
+    fun onExitButtonClick(view: View?) {
         startActivity(
             Intent(this, ConfirmExitActivity::class.java)
         )
@@ -120,5 +120,10 @@ class MainMenuActivity : AppCompatActivity() {
         startActivity(
             Intent(this, ConfirmNewGameActivity::class.java)
         )
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        onExitButtonClick(null)
     }
 }

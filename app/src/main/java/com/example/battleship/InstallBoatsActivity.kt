@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.preference.PreferenceManager
 import android.view.*
 import android.widget.LinearLayout
@@ -38,7 +37,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 
     lateinit var makeHeaderVisible: ObjectAnimator
     lateinit var makeWelcomeTextVisible: ObjectAnimator
-    var toSet = AnimatorSet()
+    var animatorSet = AnimatorSet()
 
     private lateinit var humanFieldView: LinearLayout
     private lateinit var radioButtonHorizontal: RadioButton
@@ -121,7 +120,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
                 welcomeText, "alpha", 0f, 1f
             ).setDuration(1_000)
 
-        toSet.playTogether(makeHeaderVisible, makeWelcomeTextVisible)
+        animatorSet.playTogether(makeHeaderVisible, makeWelcomeTextVisible)
         startInstallBoats()
     }
 
@@ -232,7 +231,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         }
         animator.start()
         animator.doOnEnd {
-            toSet.start()
+            animatorSet.start()
         }
     }
 

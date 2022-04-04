@@ -16,7 +16,7 @@
         <item name="android:popupMenuStyle">@style/popupMenu</item>
     </style>
 
-    <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="SplashScreenButton" parent="Widget.MaterialComponents.Button">
         <item name="shapeAppearanceOverlay">
             @style/ShapeAppearanceOverlay.BattleShip.Button.Rounded
         </item>
@@ -24,7 +24,14 @@
 
     <style name="ShapeAppearanceOverlay.BattleShip.Button.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item>
+        <item name="cornerSize">30dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:paddingHorizontal">0dp</item>
+        <item name="android:paddingVertical">0dp</item>
+
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -133,6 +140,20 @@
         <item name="iconPadding">0dp</item>
 
         <item name="iconGravity">textStart</item>
+    </style>
+
+    <style name="Splash_Screen_TextView" parent="">
+        <item name="android:inset">0px</item>
+        <item name="android:insetBottom">0px</item>
+        <item name="android:insetLeft">0px</item>
+        <item name="android:insetRight">0px</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">90sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/monumenta</item>
     </style>
 
 </resources>
