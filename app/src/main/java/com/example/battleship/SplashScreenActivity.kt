@@ -12,25 +12,10 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
+import androidx.lifecycle.ViewModelProvider
+import com.example.battleship.viewmodel.SplashScreenVM
 
 class SplashScreenActivity : AppCompatActivity() {
-
-    lateinit var animator0: ObjectAnimator
-
-    private val animator1 = ValueAnimator().setDuration(1_000)
-    private val letterList1 = listOf(" ", "Q", "U", "O", "P", "X", "S")
-
-    private val animator2 = ValueAnimator().setDuration(1_000)
-    private val letterList2 = listOf(" ", "Y", "M", "G", "R", "A", "H")
-
-    private val animator3 = ValueAnimator().setDuration(1_000)
-    private val letterList3 = listOf(" ", "D", "Y", "M", "G", "R", "C")
-
-    private val animator4 = ValueAnimator().setDuration(1_000)
-    private val letterList4 = listOf(" ", "G", "R", "A", "Q", "U", "H")
-
-    lateinit var animator5: ObjectAnimator
-    lateinit var animator6: ObjectAnimator
 
     lateinit var root: ConstraintLayout
     lateinit var letter1: TextView
@@ -68,104 +53,38 @@ class SplashScreenActivity : AppCompatActivity() {
         letter4 = findViewById(R.id.letter4)
         letter5 = findViewById(R.id.letter5)
 
-        animator1.setObjectValues("", "S")
-        animator2.setObjectValues("", "H")
-        animator3.setObjectValues("", "C")
-        animator4.setObjectValues("", "H")
-
-        animator1.addUpdateListener { animation ->
-            letter1.text = animation.animatedValue as String
-        }
-        animator2.addUpdateListener { animation ->
-            letter2.text = animation.animatedValue as String
-        }
-        animator3.addUpdateListener { animation ->
-            letter3.text = animation.animatedValue as String
-        }
-        animator4.addUpdateListener { animation ->
-            letter4.text = animation.animatedValue as String
+        val viewModel = ViewModelProvider(this)[SplashScreenVM::class.java]
+        viewModel.animator0Data.observe(this) { float ->
+            root.alpha = float
         }
 
-        animator0 = ObjectAnimator
-            .ofFloat(
-                root, "alpha", 0f, 1f
-            ).setDuration(3_000)
-
-
-        animator1.setEvaluator { fraction, _, _ ->
-            // fraction: 0 - начало анимации, 1 - конец
-            val letterPosition = (fraction * letterList1.size).toInt()
-            if (letterPosition > letterList1.size - 1) {
-                letterList1[letterList1.size - 1]
-            } else {
-                letterList1[letterPosition]
-            }
-        }
-        animator2.setEvaluator { fraction, _, _ ->
-            // fraction: 0 - начало анимации, 1 - конец
-            val letterPosition = (fraction * letterList2.size).toInt()
-            if (letterPosition > letterList2.size - 1) {
-                letterList2[letterList1.size - 1]
-            } else {
-                letterList2[letterPosition]
-            }
-        }
-        animator3.setEvaluator { fraction, _, _ ->
-            // fraction: 0 - начало анимации, 1 - конец
-            val letterPosition = (fraction * letterList3.size).toInt()
-            if (letterPosition > letterList3.size - 1) {
-                letterList3[letterList1.size - 1]
-            } else {
-                letterList3[letterPosition]
-            }
-        }
-        animator4.setEvaluator { fraction, _, _ ->
-            // fraction: 0 - начало анимации, 1 - конец
-            val letterPosition = (fraction * letterList4.size).toInt()
-            if (letterPosition > letterList4.size - 1) {
-                letterList4[letterList4.size - 1]
-            } else {
-                letterList4[letterPosition]
-            }
+        viewModel.animator1Data.observe(this) { string ->
+            letter1.text = string
         }
 
-        animator5 = ObjectAnimator
-            .ofFloat(
-                letter5, "alpha", 0f, 1f
-            ).setDuration(3_000)
+        viewModel.animator2Data.observe(this) { string ->
+            letter2.text = string
+        }
 
-        animator6 = ObjectAnimator
-            .ofFloat(
-                root, "alpha", 1f, 0f
-            ).setDuration(3_000)
+        viewModel.animator3Data.observe(this) { string ->
+            letter3.text = string
+        }
 
-        startAnimation()
-    }
+        viewModel.animator4Data.observe(this) { string ->
+            letter4.text = string
+        }
 
-    fun startAnimation() {
-        animator0.start()
-        animator0.doOnEnd {
-            animator1.start()
-            animator1.doOnEnd {
-                animator2.start()
-                animator2.doOnEnd {
-                    animator3.start()
-                    animator3.doOnEnd {
-                        animator4.start()
-                        animator4.doOnEnd {
-                            animator5.start()
-                            animator5.doOnEnd {
-                                animator6.start()
-                                animator6.doOnEnd {
-                                    startActivity(
-                                        Intent(this, MainMenuActivity::class.java)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        viewModel.animator5Data.observe(this) { float ->
+            letter5.alpha = float
+        }
+
+        viewModel.animator6Data.observe(this) { float ->
+            root.alpha = float
+        }
+
+        viewModel.isAnimationFinished.observe(this) { boolean ->
+            if (boolean)
+                startActivity(Intent(this, MainMenuActivity::class.java))
         }
     }
 }

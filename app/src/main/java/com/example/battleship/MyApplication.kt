@@ -280,6 +280,8 @@ class MyApplication : Application() {
         HumanButton.buttonCounter = 0
         RobotButton.buttonCounter = 0
 
+        turnsCounter = 0
+
         savedHumanButtonMap.clear()
         savedRobotButtonMap.clear()
 
