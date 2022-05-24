@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BattleShip">
         <activity
+            android:name=".UserNameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RecordActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreenActivity"
             android:exported="true">
             <intent-filter>
@@ -38,9 +44,7 @@
             android:exported="false" />
         <activity
             android:name=".MainMenuActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
     </application>
 
 </manifest>

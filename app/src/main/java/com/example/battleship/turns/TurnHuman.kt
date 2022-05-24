@@ -93,6 +93,7 @@ class TurnHuman(
                             turnNumber.text =
                                 context.getString(R.string.game_over, app.turnsCounter)
                         }
+                        app.isHumanWin = true
                         return false to app.turnsCounter
                     }
                 } else { // Если попал, но остались жизни

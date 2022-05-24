@@ -1,5 +1,6 @@
 package com.example.battleship
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -8,16 +9,16 @@ import android.view.View
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
-import com.example.battleship.seabutton.HumanButton
-import com.example.battleship.seabutton.RobotButton
+import android.widget.EditText
+import androidx.activity.result.contract.ActivityResultContracts
 
-class ConfirmNewGameActivity : AppCompatActivity() {
+class UserNameActivity : AppCompatActivity() {
 
-    private lateinit var app: MyApplication
+    val app = MyApplication.getAppInstance()
+    lateinit var name: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = MyApplication.getAppInstance()
 
         // Делаем фул-скрин
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -33,26 +34,33 @@ class ConfirmNewGameActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         supportActionBar?.hide()
 
-        setContentView(R.layout.activity_confirm_new_game)
+        setContentView(R.layout.activity_user_name)
+
+        name = findViewById(R.id.name)
+        name.requestFocus()
     }
 
-    fun newGame(view: View) {
-        app.resetGame()
-        startActivity(
-            Intent(this, UserNameActivity::class.java)
-        )
+    fun saveName(view: View) {
+        if (name.text.isNotBlank()) {
+            app.userName = name.text.toString()
+            startActivity(
+                Intent(this, InstallBoatsActivity::class.java)
+            )
+        } else {
+            showError()
+        }
+
     }
 
-    fun returnToGame(view: View) {
-        startActivity(
-            Intent(this,MainMenuActivity::class.java)
-        )
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        startActivity(
-            Intent(this,MainMenuActivity::class.java)
-        )
+    private fun showError() {
+        AlertDialog.Builder(this)
+            .setMessage("Имя не может быть пустым")
+            .setPositiveButton(
+                "Ok"
+            ) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 }

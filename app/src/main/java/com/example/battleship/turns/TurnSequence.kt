@@ -9,6 +9,7 @@ import com.example.battleship.MainMenuActivity
 import com.example.battleship.MyApplication
 import com.example.battleship.TurnsActivity
 import com.example.battleship.coordinates.Coordinate
+import com.example.battleship.record.RecordSaver
 import com.example.battleship.seabutton.RobotButton
 import kotlinx.coroutines.*
 
@@ -69,6 +70,7 @@ class TurnSequence(
             }
         } else {
             stopListenButtons()
+            context?.run { RecordSaver.save(context) }
             return
 //            delay(10_000)
 //            runMainMenuActivity()

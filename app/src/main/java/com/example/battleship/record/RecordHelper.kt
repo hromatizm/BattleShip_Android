@@ -41,7 +41,12 @@ class RecordHelper(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE, null, DBVERSI
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
     }
 
+    fun saveRecord(name: String, ){
+
+    }
 }
+
+
 
 val Context.database: RecordHelper
     get() = RecordHelper.getInstance(this)

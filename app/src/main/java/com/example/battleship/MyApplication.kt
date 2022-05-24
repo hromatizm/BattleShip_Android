@@ -2,12 +2,11 @@ package com.example.battleship
 
 import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.res.Resources
-import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.os.VibratorManager
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -19,11 +18,13 @@ import com.example.battleship.seabutton.SeaButton
 import com.example.battleship.fields.TechField
 import com.example.battleship.seabutton.RobotButton
 import com.example.battleship.turns.TurnSequence
+import java.lang.ref.WeakReference
 
 class MyApplication : Application() {
 
     companion object {
 
+        @SuppressLint("StaticFieldLeak")
         private lateinit var appInstance: MyApplication
         fun getAppInstance(): MyApplication {
             return appInstance
@@ -42,11 +43,15 @@ class MyApplication : Application() {
     var isGameOver = false // Для перерисовки интерфейса при повроте экрана после конца игры
 
     var isFirstStartOfMainMenuActivity = true // Первый запуск MainMenuActivity
+    var isFirstStartOfInstallBoatsActivity = true // Первый запуск MainMenuActivity
     var isFirstStartOfTurnsActivity = true // Первый запуск TurnsActivity
+    var isHumanWin = false
 
-    //    var isFirstStartOfInstallBoatsActivity = true // Первый запуск TurnsActivity
     var isHumanBoatInstalled = false // Завершена расстановка кораблей игроком
     var isLandscape = false // Какая ориентация экрана
+
+    var userName = ""
+
 
     lateinit var humanFieldView: LinearLayout
     var robotFieldView: LinearLayout? = null
@@ -293,6 +298,7 @@ class MyApplication : Application() {
 
         isHumanBoatInstalled = false
         isFirstStartOfTurnsActivity = true
+        isFirstStartOfInstallBoatsActivity = true
     }
 
     override fun onCreate() {

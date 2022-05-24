@@ -37,12 +37,19 @@
             app:icon="@drawable/ic_baseline_arrow_back_24" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/records"
+            style="@style/Toolbar_Button"
+            android:layout_marginHorizontal="20dp"
+            android:onClick="showRecords"
+            app:icon="@drawable/ic_record_table_24" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/settings"
             style="@style/Toolbar_Button"
             android:layout_marginHorizontal="20dp"
             android:onClick="showSettings"
             app:icon="@drawable/ic_baseline_settings_24" />
-           />
+
 
     </LinearLayout>
 

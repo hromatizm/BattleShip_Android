@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_android_24.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/round_button.xml" value="0.2055" />
+        <entry key="app/src/main/res/drawable/rounded_edittext.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/rounded_letter.xml" value="0.2055" />
         <entry key="app/src/main/res/drawable/rounded_popup.xml" value="0.1245" />
         <entry key="app/src/main/res/layout-land/activity_confirm_exit.xml" value="0.152" />
@@ -26,12 +27,15 @@
         <entry key="app/src/main/res/layout/activity_main_menu.xml" value="0.176" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_turns.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_user_name.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/dialog_add.xml" value="0.4057971014492754" />
         <entry key="app/src/main/res/layout/human_field.xml" value="0.1" />
         <entry key="app/src/main/res/layout/human_field_view.xml" value="0.176" />
         <entry key="app/src/main/res/layout/letters_line.xml" value="0.25" />
         <entry key="app/src/main/res/layout/letters_line_view.xml" value="0.20232088799192735" />
         <entry key="app/src/main/res/layout/preferences.xml" value="0.20232088799192735" />
         <entry key="app/src/main/res/layout/record_line_view.xml" value="0.40729166666666666" />
+        <entry key="app/src/main/res/layout/record_table.xml" value="0.4203125" />
         <entry key="app/src/main/res/layout/robot_field.xml" value="0.25" />
         <entry key="app/src/main/res/layout/robot_field_view.xml" value="0.25" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.20232088799192735" />

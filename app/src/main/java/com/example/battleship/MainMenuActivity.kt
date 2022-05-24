@@ -46,7 +46,6 @@ class MainMenuActivity : AppCompatActivity() {
         // Прозрачный Navigation bar:
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-
         // Скрываем Tool bar:
         supportActionBar?.hide()
 
@@ -66,7 +65,7 @@ class MainMenuActivity : AppCompatActivity() {
 
         titleAnimation = ObjectAnimator
             .ofFloat(
-                title, "translationY",  (-1) * app.displayHeight.toFloat() , buttonStartY
+                title, "translationY", (-1) * app.displayHeight.toFloat(), buttonStartY
             ).setDuration(1000)
 
         buttonStartAnimation = ObjectAnimator
@@ -87,14 +86,13 @@ class MainMenuActivity : AppCompatActivity() {
     }
 
     fun onMainButtonClick(view: View) {
-        if (app.isHumanBoatInstalled) {
-            startActivity(
-                Intent(this, TurnsActivity::class.java)
-            )
-        } else {
-            startActivity(
-                Intent(this, InstallBoatsActivity::class.java)
-            )
+        when {
+            app.isHumanBoatInstalled ->
+                startActivity(Intent(this, TurnsActivity::class.java))
+            app.isFirstStartOfInstallBoatsActivity ->
+                startActivity(Intent(this, UserNameActivity::class.java))
+            else ->
+                startActivity(Intent(this, InstallBoatsActivity::class.java))
         }
     }
 

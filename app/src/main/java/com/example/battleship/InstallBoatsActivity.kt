@@ -25,6 +25,7 @@ import com.example.battleship.coordinates.HumanCoordGetter
 import com.example.battleship.seabutton.HumanButton
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
@@ -61,6 +62,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         app = MyApplication.getAppInstance()
 
         app.isFirstStartOfMainMenuActivity = false
+        app.isFirstStartOfInstallBoatsActivity = false
 
 // Делаем фул-скрин
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -182,7 +184,7 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
-//    fun confirmToggle(view: View) {
+    //    fun confirmToggle(view: View) {
 //        app.isConfirm = !app.isConfirm
 //        setOptionsButtonsFont()
 //    }
@@ -193,6 +195,9 @@ class InstallBoatsActivity : AppCompatActivity(), View.OnClickListener,
 //        app.toggleIndex(humanField)
 //        app.fitScreenSize(humanField)
 //    }
+    fun showRecords(view: View) {
+        startActivity(Intent(this, RecordActivity::class.java))
+    }
 
     override fun onStart() {
         super.onStart()

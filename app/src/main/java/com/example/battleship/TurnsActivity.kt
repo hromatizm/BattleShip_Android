@@ -105,7 +105,8 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
 //        turnNumber.text = textOfTurnNumber
 
         app.vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibratorManager =
+                getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             vibratorManager.defaultVibrator
         } else {
             @Suppress("DEPRECATION")
@@ -115,33 +116,33 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
             getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
 
-         if (app.isFirstStartOfTurnsActivity) {
-                MainScope().launch { startOver() }
-                app.isFirstStartOfTurnsActivity = false
+        if (app.isFirstStartOfTurnsActivity) {
+            MainScope().launch { startOver() }
+            app.isFirstStartOfTurnsActivity = false
+        }
+    }
+
+    override fun onClick(view: View?) {
+        when (view) {
+            is RobotButton -> {
+                println("${(view as SeaButton).coord.letter} ${(view as SeaButton).coord.number}")
+                MainScope().launch { turnSequence.humanTurn(view) }
             }
         }
+    }
 
-        override fun onClick(view: View?) {
-            when (view) {
-                is RobotButton -> {
-                    println("${(view as SeaButton).coord.letter} ${(view as SeaButton).coord.number}")
-                    MainScope().launch { turnSequence.humanTurn(view) }
-                }
-            }
-        }
+    private suspend fun startOver() {
+        turnSequence.robotTurn()
+    }
 
-        private suspend fun startOver() {
-            turnSequence.robotTurn()
+    private fun hideSystemUI(mainContainer: View) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, mainContainer).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
-
-        private fun hideSystemUI(mainContainer: View) {
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            WindowInsetsControllerCompat(window, mainContainer).let { controller ->
-                controller.hide(WindowInsetsCompat.Type.systemBars())
-                controller.systemBarsBehavior =
-                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        }
+    }
 
 //    private fun setOptionsButtonsFont() {
 //        if (app.isIndex) {
@@ -155,87 +156,91 @@ class TurnsActivity : AppCompatActivity(), View.OnClickListener {
 //        }
 //    }
 
-        fun showSettings(view: View) {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
+    fun showSettings(view: View) {
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
+    }
 
-        override fun onResume() {
-            super.onResume()
-            hideSystemUI(rootView)
+    fun showRecords(view: View) {
+        startActivity(Intent(this, RecordActivity::class.java))
+    }
 
-            val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-            app.isConfirm =
-                preferences.getBoolean(getString(R.string.confirm_install_key), true)
-            app.isIndex =
-                preferences.getBoolean(getString(R.string.show_index_key), true)
-            app.isSoundActive =
-                preferences.getBoolean(getString(R.string.sound_settings_key), true)
-            app.isVibrationActive =
-                preferences.getBoolean(getString(R.string.vibration_settings_key), true)
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI(rootView)
+
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        app.isConfirm =
+            preferences.getBoolean(getString(R.string.confirm_install_key), true)
+        app.isIndex =
+            preferences.getBoolean(getString(R.string.show_index_key), true)
+        app.isSoundActive =
+            preferences.getBoolean(getString(R.string.sound_settings_key), true)
+        app.isVibrationActive =
+            preferences.getBoolean(getString(R.string.vibration_settings_key), true)
 
 
-            app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
-            app.toggleIndex(humanFieldView)
-            app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
-            app.toggleIndex(robotFieldView)
+        app.fitScreenSize(humanFieldView, app.isHumanFieldActive)
+        app.toggleIndex(humanFieldView)
+        app.fitScreenSize(robotFieldView, app.isRobotFieldActive)
+        app.toggleIndex(robotFieldView)
 
-            statusTextRobot.text = app.textForStatusTextRobot
-            statusTextHuman.text = app.textForStatusTextHuman
-            turnNumber.text = app.textForTurnNumber
+        statusTextRobot.text = app.textForStatusTextRobot
+        statusTextHuman.text = app.textForStatusTextHuman
+        turnNumber.text = app.textForTurnNumber
 
 //        setOptionsButtonsFont()
-        }
+    }
 
-        override fun onStart() {
-            super.onStart()
-            configuration = resources.configuration
-            app.isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    override fun onStart() {
+        super.onStart()
+        configuration = resources.configuration
+        app.isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        if (app.isLandscape) {
+            app.setRobotFieldActive()
+        }
+        if (app.isGameOver) {
+            app.statusTextHuman.visibility = View.GONE
+            app.statusTextRobot.visibility = View.GONE
+            turnNumber.setTextColor(
+                ContextCompat.getColor(app.applicationContext, R.color.red)
+            )
             if (app.isLandscape) {
-                app.setRobotFieldActive()
+                val params = turnNumber.layoutParams
+                params.height = 200
             }
-            if (app.isGameOver) {
-                app.statusTextHuman.visibility = View.GONE
-                app.statusTextRobot.visibility = View.GONE
-                turnNumber.setTextColor(
-                    ContextCompat.getColor(app.applicationContext, R.color.red)
-                )
-                if (app.isLandscape) {
-                    val params = turnNumber.layoutParams
-                    params.height = 200
-                }
-            }
+        }
 
 //        Log.d("zzz1",app.isLandscape.toString())
 //        Log.d("zzz1", app.getSeaButtonSize().toString())
-        }
+    }
 
-        override fun onBackPressed() {
-            val intent = Intent(this, MainMenuActivity::class.java)
-            startActivity(intent)
-            super.onBackPressed()
-        }
+    override fun onBackPressed() {
+        val intent = Intent(this, MainMenuActivity::class.java)
+        startActivity(intent)
+        super.onBackPressed()
+    }
 
-        override fun onPause() {
-            Thread.sleep(1000)
-            app.textForStatusTextHuman = statusTextHuman.text.toString()
-            app.textForStatusTextRobot = statusTextRobot.text.toString()
-            app.textForTurnNumber = turnNumber.text.toString()
-            super.onPause()
-        }
+    override fun onPause() {
+        Thread.sleep(1000)
+        app.textForStatusTextHuman = statusTextHuman.text.toString()
+        app.textForStatusTextRobot = statusTextRobot.text.toString()
+        app.textForTurnNumber = turnNumber.text.toString()
+        super.onPause()
+    }
 
-        override fun onDestroy() {
-            super.onDestroy()
-            HumanButton.buttonCounter = 0
-            app.saveHumanButtonMap()
-            RobotButton.buttonCounter = 0
-            app.saveRobotButtonMap()
+    override fun onDestroy() {
+        super.onDestroy()
+        HumanButton.buttonCounter = 0
+        app.saveHumanButtonMap()
+        RobotButton.buttonCounter = 0
+        app.saveRobotButtonMap()
 //        Log.d("zzz", statusText.text.toString())
 //        Log.d("zzz", textOfStatusText)
-        }
+    }
 
-        fun goBackFromTurns(view: View) {
-            onBackPressed()
-        }
+    fun goBackFromTurns(view: View) {
+        onBackPressed()
+    }
 
 }

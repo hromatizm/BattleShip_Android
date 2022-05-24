@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sky_blue"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".UserNameActivity">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="20dp"
+        android:autoSizeMaxTextSize="50sp"
+        android:autoSizeMinTextSize="30sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:fontFamily="@font/righteous"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="Как Вас зовут?"
+        android:textColor="@color/light_sky_blue"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/text"
+        android:gravity="center">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_edittext"
+            android:gravity="center"
+            android:maxWidth="300dp"
+            android:paddingHorizontal="10dp"
+            android:text=""
+            android:inputType="textCapWords"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_no"
+            style="@style/Main_Menu_Button"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="ОК"
+            android:onClick="saveName"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

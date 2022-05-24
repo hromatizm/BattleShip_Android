@@ -101,6 +101,7 @@ class TurnRobot(
                             turnNumber.text =
                                 context.getString(R.string.game_over, app.turnsCounter)
                         }
+                        app.isHumanWin = false
                         return false to app.turnsCounter
                     }
                 } else { // Если попал, но остались жизни
